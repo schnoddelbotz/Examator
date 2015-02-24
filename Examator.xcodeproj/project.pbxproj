@@ -1,0 +1,612 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D4A80CB1A99560300A5A6EB /* libssh.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */; };
+		3D4A80CE1A99562B00A5A6EB /* libssh.4.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3D5FED151A948EC9004388B2 /* ExamHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5FED141A948EC9004388B2 /* ExamHostView.swift */; };
+		3D5FED171A9491B7004388B2 /* ExamHostCollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5FED161A9491B7004388B2 /* ExamHostCollectionItem.swift */; };
+		3D63485C1A99373200C57B21 /* SSH.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D63485B1A99373200C57B21 /* SSH.c */; };
+		3D9B8B281A96A5FC00E4E5CF /* ExamRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B8B271A96A5FC00E4E5CF /* ExamRoom.swift */; };
+		3DF72E601A93D73A00C9F130 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E5F1A93D73A00C9F130 /* AppDelegate.swift */; };
+		3DF72E621A93D73A00C9F130 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E611A93D73A00C9F130 /* Images.xcassets */; };
+		3DF72E651A93D73A00C9F130 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E631A93D73A00C9F130 /* MainMenu.xib */; };
+		3DF72E711A93D73A00C9F130 /* ExamatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E701A93D73A00C9F130 /* ExamatorTests.swift */; };
+		3DF72E7B1A93E92B00C9F130 /* SetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E7A1A93E92B00C9F130 /* SetupViewController.swift */; };
+		3DF72E7D1A93EB8900C9F130 /* ExamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E7C1A93EB8900C9F130 /* ExamViewController.swift */; };
+		3DF72E7F1A93ECBC00C9F130 /* roomdata.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E7E1A93ECBC00C9F130 /* roomdata.json */; };
+		3DF72E831A94115E00C9F130 /* ExamHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E821A94115E00C9F130 /* ExamHost.swift */; };
+		3DF72E861A94117800C9F130 /* rescan.tif in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E841A94117800C9F130 /* rescan.tif */; };
+		3DF72E871A94117800C9F130 /* save.tif in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E851A94117800C9F130 /* save.tif */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3DB8B74D1A9960F500BFD9F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3DF72E521A93D73A00C9F130 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DB8B7471A995F9100BFD9F7;
+			remoteInfo = libssh;
+		};
+		3DF72E6B1A93D73A00C9F130 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3DF72E521A93D73A00C9F130 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DF72E591A93D73A00C9F130;
+			remoteInfo = Examator;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3D4A80CD1A99562400A5A6EB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				3D4A80CE1A99562B00A5A6EB /* libssh.4.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3D48930A1A995AC300D3121D /* callbacks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = callbacks.h; sourceTree = "<group>"; };
+		3D48930B1A995AC300D3121D /* sftp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sftp.h; sourceTree = "<group>"; };
+		3D48930C1A995AC300D3121D /* ssh2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ssh2.h; sourceTree = "<group>"; };
+		3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssh.4.dylib; path = ../libssh.4.dylib; sourceTree = "<group>"; };
+		3D5FED141A948EC9004388B2 /* ExamHostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamHostView.swift; sourceTree = "<group>"; };
+		3D5FED161A9491B7004388B2 /* ExamHostCollectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamHostCollectionItem.swift; sourceTree = "<group>"; };
+		3D6348591A99369600C57B21 /* libssh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libssh.h; sourceTree = "<group>"; };
+		3D63485A1A99373200C57B21 /* Examator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Examator-Bridging-Header.h"; sourceTree = "<group>"; };
+		3D63485B1A99373200C57B21 /* SSH.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SSH.c; sourceTree = "<group>"; };
+		3D9B8B271A96A5FC00E4E5CF /* ExamRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamRoom.swift; sourceTree = "<group>"; };
+		3DB8B7481A995F9100BFD9F7 /* liblibssh.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = liblibssh.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DF72E5A1A93D73A00C9F130 /* Examator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DF72E5E1A93D73A00C9F130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DF72E5F1A93D73A00C9F130 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3DF72E611A93D73A00C9F130 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		3DF72E641A93D73A00C9F130 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		3DF72E6A1A93D73A00C9F130 /* ExamatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExamatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DF72E6F1A93D73A00C9F130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DF72E701A93D73A00C9F130 /* ExamatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamatorTests.swift; sourceTree = "<group>"; };
+		3DF72E7A1A93E92B00C9F130 /* SetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupViewController.swift; sourceTree = "<group>"; };
+		3DF72E7C1A93EB8900C9F130 /* ExamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamViewController.swift; sourceTree = "<group>"; };
+		3DF72E7E1A93ECBC00C9F130 /* roomdata.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = roomdata.json; sourceTree = "<group>"; };
+		3DF72E821A94115E00C9F130 /* ExamHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamHost.swift; sourceTree = "<group>"; };
+		3DF72E841A94117800C9F130 /* rescan.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = rescan.tif; sourceTree = "<group>"; };
+		3DF72E851A94117800C9F130 /* save.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = save.tif; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3DB8B7451A995F9100BFD9F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF72E571A93D73A00C9F130 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D4A80CB1A99560300A5A6EB /* libssh.4.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF72E671A93D73A00C9F130 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D48930D1A995B4400D3121D /* libssh */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */,
+				3D6348591A99369600C57B21 /* libssh.h */,
+				3D48930A1A995AC300D3121D /* callbacks.h */,
+				3D48930B1A995AC300D3121D /* sftp.h */,
+				3D48930C1A995AC300D3121D /* ssh2.h */,
+			);
+			name = libssh;
+			sourceTree = "<group>";
+		};
+		3DF72E511A93D73A00C9F130 = {
+			isa = PBXGroup;
+			children = (
+				3DF72E5C1A93D73A00C9F130 /* Examator */,
+				3DF72E6D1A93D73A00C9F130 /* ExamatorTests */,
+				3DF72E5B1A93D73A00C9F130 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3DF72E5B1A93D73A00C9F130 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DF72E5A1A93D73A00C9F130 /* Examator.app */,
+				3DF72E6A1A93D73A00C9F130 /* ExamatorTests.xctest */,
+				3DB8B7481A995F9100BFD9F7 /* liblibssh.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3DF72E5C1A93D73A00C9F130 /* Examator */ = {
+			isa = PBXGroup;
+			children = (
+				3DF72E5F1A93D73A00C9F130 /* AppDelegate.swift */,
+				3DF72E7A1A93E92B00C9F130 /* SetupViewController.swift */,
+				3DF72E7C1A93EB8900C9F130 /* ExamViewController.swift */,
+				3DF72E821A94115E00C9F130 /* ExamHost.swift */,
+				3D9B8B271A96A5FC00E4E5CF /* ExamRoom.swift */,
+				3D5FED141A948EC9004388B2 /* ExamHostView.swift */,
+				3D5FED161A9491B7004388B2 /* ExamHostCollectionItem.swift */,
+				3D63485B1A99373200C57B21 /* SSH.c */,
+				3D63485A1A99373200C57B21 /* Examator-Bridging-Header.h */,
+				3D48930D1A995B4400D3121D /* libssh */,
+				3DF72E611A93D73A00C9F130 /* Images.xcassets */,
+				3DF72E631A93D73A00C9F130 /* MainMenu.xib */,
+				3DF72E5D1A93D73A00C9F130 /* Supporting Files */,
+			);
+			path = Examator;
+			sourceTree = "<group>";
+		};
+		3DF72E5D1A93D73A00C9F130 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3DF72E841A94117800C9F130 /* rescan.tif */,
+				3DF72E851A94117800C9F130 /* save.tif */,
+				3DF72E7E1A93ECBC00C9F130 /* roomdata.json */,
+				3DF72E5E1A93D73A00C9F130 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3DF72E6D1A93D73A00C9F130 /* ExamatorTests */ = {
+			isa = PBXGroup;
+			children = (
+				3DF72E701A93D73A00C9F130 /* ExamatorTests.swift */,
+				3DF72E6E1A93D73A00C9F130 /* Supporting Files */,
+			);
+			path = ExamatorTests;
+			sourceTree = "<group>";
+		};
+		3DF72E6E1A93D73A00C9F130 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3DF72E6F1A93D73A00C9F130 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3DB8B7461A995F9100BFD9F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3DB8B7471A995F9100BFD9F7 /* libssh */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DB8B74B1A995F9100BFD9F7 /* Build configuration list for PBXNativeTarget "libssh" */;
+			buildPhases = (
+				3DB8B7441A995F9100BFD9F7 /* Sources */,
+				3DB8B7451A995F9100BFD9F7 /* Frameworks */,
+				3DB8B7461A995F9100BFD9F7 /* Headers */,
+				3DB8B74C1A995FDA00BFD9F7 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libssh;
+			productName = libssh;
+			productReference = 3DB8B7481A995F9100BFD9F7 /* liblibssh.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		3DF72E591A93D73A00C9F130 /* Examator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DF72E741A93D73A00C9F130 /* Build configuration list for PBXNativeTarget "Examator" */;
+			buildPhases = (
+				3DF72E561A93D73A00C9F130 /* Sources */,
+				3DF72E571A93D73A00C9F130 /* Frameworks */,
+				3DF72E581A93D73A00C9F130 /* Resources */,
+				3D4A80CD1A99562400A5A6EB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3DB8B74E1A9960F500BFD9F7 /* PBXTargetDependency */,
+			);
+			name = Examator;
+			productName = Examator;
+			productReference = 3DF72E5A1A93D73A00C9F130 /* Examator.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3DF72E691A93D73A00C9F130 /* ExamatorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DF72E771A93D73A00C9F130 /* Build configuration list for PBXNativeTarget "ExamatorTests" */;
+			buildPhases = (
+				3DF72E661A93D73A00C9F130 /* Sources */,
+				3DF72E671A93D73A00C9F130 /* Frameworks */,
+				3DF72E681A93D73A00C9F130 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3DF72E6C1A93D73A00C9F130 /* PBXTargetDependency */,
+			);
+			name = ExamatorTests;
+			productName = ExamatorTests;
+			productReference = 3DF72E6A1A93D73A00C9F130 /* ExamatorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3DF72E521A93D73A00C9F130 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = schnoddelbotz;
+				TargetAttributes = {
+					3DB8B7471A995F9100BFD9F7 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					3DF72E591A93D73A00C9F130 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					3DF72E691A93D73A00C9F130 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 3DF72E591A93D73A00C9F130;
+					};
+				};
+			};
+			buildConfigurationList = 3DF72E551A93D73A00C9F130 /* Build configuration list for PBXProject "Examator" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3DF72E511A93D73A00C9F130;
+			productRefGroup = 3DF72E5B1A93D73A00C9F130 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3DF72E591A93D73A00C9F130 /* Examator */,
+				3DF72E691A93D73A00C9F130 /* ExamatorTests */,
+				3DB8B7471A995F9100BFD9F7 /* libssh */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3DF72E581A93D73A00C9F130 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DF72E871A94117800C9F130 /* save.tif in Resources */,
+				3DF72E621A93D73A00C9F130 /* Images.xcassets in Resources */,
+				3DF72E651A93D73A00C9F130 /* MainMenu.xib in Resources */,
+				3DF72E7F1A93ECBC00C9F130 /* roomdata.json in Resources */,
+				3DF72E861A94117800C9F130 /* rescan.tif in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF72E681A93D73A00C9F130 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3DB8B74C1A995FDA00BFD9F7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# build libssh.4.dylib into Examtor directory.\n\n# cmake is required! (brew install cmake ...)\nexport PATH=/usr/local/bin:$PATH\n\nif [ ! -f libssh.4.dylib ]; then\n\n  git clone git://git.libssh.org/projects/libssh.git libssh\n  cd libssh\n  mkdir build\n  cd build\n  cmake -DWITH_ZLIB=OFF -DOPENSSL_INCLUDE_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include -DCMAKE_INSTALL_PREFIX=../../libssh-built -DCMAKE_INSTALL_NAME_DIR=@executable_path ..\n  make -j8\n  make install\n  cd ../..\n  cp libssh-built/lib/libssh.4.dylib .\n  rm -rf libssh libssh-built\n\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3DB8B7441A995F9100BFD9F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF72E561A93D73A00C9F130 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D9B8B281A96A5FC00E4E5CF /* ExamRoom.swift in Sources */,
+				3DF72E7B1A93E92B00C9F130 /* SetupViewController.swift in Sources */,
+				3DF72E601A93D73A00C9F130 /* AppDelegate.swift in Sources */,
+				3D5FED151A948EC9004388B2 /* ExamHostView.swift in Sources */,
+				3D63485C1A99373200C57B21 /* SSH.c in Sources */,
+				3D5FED171A9491B7004388B2 /* ExamHostCollectionItem.swift in Sources */,
+				3DF72E831A94115E00C9F130 /* ExamHost.swift in Sources */,
+				3DF72E7D1A93EB8900C9F130 /* ExamViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF72E661A93D73A00C9F130 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DF72E711A93D73A00C9F130 /* ExamatorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3DB8B74E1A9960F500BFD9F7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DB8B7471A995F9100BFD9F7 /* libssh */;
+			targetProxy = 3DB8B74D1A9960F500BFD9F7 /* PBXContainerItemProxy */;
+		};
+		3DF72E6C1A93D73A00C9F130 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DF72E591A93D73A00C9F130 /* Examator */;
+			targetProxy = 3DF72E6B1A93D73A00C9F130 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3DF72E631A93D73A00C9F130 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3DF72E641A93D73A00C9F130 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3DB8B7491A995F9100BFD9F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3DB8B74A1A995F9100BFD9F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3DF72E721A93D73A00C9F130 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3DF72E731A93D73A00C9F130 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3DF72E751A93D73A00C9F130 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Examator/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Examator",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Examator/Examator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3DF72E761A93D73A00C9F130 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Examator/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Examator",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Examator/Examator-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		3DF72E781A93D73A00C9F130 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ExamatorTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Examator.app/Contents/MacOS/Examator";
+			};
+			name = Debug;
+		};
+		3DF72E791A93D73A00C9F130 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ExamatorTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Examator.app/Contents/MacOS/Examator";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3DB8B74B1A995F9100BFD9F7 /* Build configuration list for PBXNativeTarget "libssh" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DB8B7491A995F9100BFD9F7 /* Debug */,
+				3DB8B74A1A995F9100BFD9F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DF72E551A93D73A00C9F130 /* Build configuration list for PBXProject "Examator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DF72E721A93D73A00C9F130 /* Debug */,
+				3DF72E731A93D73A00C9F130 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DF72E741A93D73A00C9F130 /* Build configuration list for PBXNativeTarget "Examator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DF72E751A93D73A00C9F130 /* Debug */,
+				3DF72E761A93D73A00C9F130 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DF72E771A93D73A00C9F130 /* Build configuration list for PBXNativeTarget "ExamatorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DF72E781A93D73A00C9F130 /* Debug */,
+				3DF72E791A93D73A00C9F130 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3DF72E521A93D73A00C9F130 /* Project object */;
+}
