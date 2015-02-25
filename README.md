@@ -8,7 +8,7 @@ Implemented in [Swift](https://developer.apple.com/swift/), relying on
 and [libssh](http://www.libssh.org/) for SSH remote monitoring/execution and
 file transfers in both directions.
 
-The idea behind Examator is to use the Mac to effectively monitor and
+The idea behind Examator is to use the Mac to efficiently monitor and
 control a bigger bunch of workstations via GUI while integrating zero-brainer
 continous remote backup for a specified students' result folder.
 

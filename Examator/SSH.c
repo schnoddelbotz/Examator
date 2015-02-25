@@ -288,81 +288,6 @@ int verify_knownhost(ssh_session session){
   return 0;
 }
 
-int authenticate_kbdint(ssh_session session, const char *password) {
-  int err;
-  
-  err = ssh_userauth_kbdint(session, NULL, NULL);
-  while (err == SSH_AUTH_INFO) {
-    const char *instruction;
-    const char *name;
-    char buffer[128];
-    int i, n;
-    
-    name = ssh_userauth_kbdint_getname(session);
-    instruction = ssh_userauth_kbdint_getinstruction(session);
-    n = ssh_userauth_kbdint_getnprompts(session);
-    
-    if (name && strlen(name) > 0) {
-      printf("%s\n", name);
-    }
-    
-    if (instruction && strlen(instruction) > 0) {
-      printf("%s\n", instruction);
-    }
-    
-    for (i = 0; i < n; i++) {
-      const char *answer;
-      const char *prompt;
-      char echo;
-      
-      prompt = ssh_userauth_kbdint_getprompt(session, i, &echo);
-      if (prompt == NULL) {
-        break;
-      }
-      
-      if (echo) {
-        char *p;
-        
-        printf("%s", prompt);
-        
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
-          return SSH_AUTH_ERROR;
-        }
-        
-        buffer[sizeof(buffer) - 1] = '\0';
-        if ((p = strchr(buffer, '\n'))) {
-          *p = '\0';
-        }
-        
-        if (ssh_userauth_kbdint_setanswer(session, i, buffer) < 0) {
-          return SSH_AUTH_ERROR;
-        }
-        
-        memset(buffer, 0, strlen(buffer));
-      } else {
-        if (password && strstr(prompt, "Password:")) {
-          answer = password;
-        } else {
-          buffer[0] = '\0';
-          
-          if (ssh_getpass(prompt, buffer, sizeof(buffer), 0, 0) < 0) {
-            return SSH_AUTH_ERROR;
-          }
-          answer = buffer;
-        }
-        err = ssh_userauth_kbdint_setanswer(session, i, answer);
-        memset(buffer, 0, sizeof(buffer));
-        if (err < 0) {
-          return SSH_AUTH_ERROR;
-        }
-      }
-    }
-    err=ssh_userauth_kbdint(session,NULL,NULL);
-  }
-  
-  return err;
-}
-
 static void error(ssh_session session){
   fprintf(stderr,"Authentication failed: %s\n",ssh_get_error(session));
 }
@@ -389,7 +314,7 @@ int authenticate_pubkey(ssh_session session){
       // yippie it worked!
     }
   } else {
-    printf("Yuck! the server does not support pubkey auth?\n");
+    printf("Yikes! the server does not support pubkey auth?\n");
   }
   
   return rc;
