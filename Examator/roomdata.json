@@ -1,20 +1,21 @@
 {
   "rooms":[
-    {"id":"1","parent_id":null,"optionset_id":null,"name":"ROOT","description":"root","idle_power":"0.0","logging":"0","children":["2"]},
-    {"id":"2","parent_id":"1","optionset_id":null,"name":"Student labs","description":"Computer rooms (empty example OU)","idle_power":"0.0","logging":"0","children":["3","8","12"]},
-    {"id":"3","parent_id":"2","optionset_id":null,"name":"E-Floor","description":"","idle_power":null,"logging":"0","children":["4","5","6","7"]},
-    {"id":"4","parent_id":"3","optionset_id":null,"name":"E 12","description":null,"idle_power":null,"logging":"0","children":[]},
-    {"id":"12","parent_id":"2","optionset_id":null,"name":"Testboxes","description":null,"idle_power":null,"logging":"0","children":["13"]},
-    {"id":"13","parent_id":"12","optionset_id":null,"name":"Playroom","description":null,"idle_power":null,"logging":"0","children":[]}
+    {"id":"1","parent_id":null,"optionset_id":null,"name":"ROOT","children":["2"]},
+    {"id":"2","parent_id":"1","optionset_id":null,"name":"Student labs","children":["3","8","12"]},
+    {"id":"3","parent_id":"2","optionset_id":null,"name":"E-Floor","children":["4"]},
+    {"id":"4","parent_id":"3","optionset_id":null,"name":"E 12","children":[]},
+    {"id":"12","parent_id":"2","optionset_id":null,"name":"Testboxes","children":["13"]},
+    {"id":"13","parent_id":"12","optionset_id":null,"name":"Playroom","children":[]}
   ],
   "hosts":[
     {"id":"123","ou_id":"4","hostname":"lab1pc01","enabled":"1"},
-    {"id":"124","ou_id":"4","hostname":"lab1pc09","enabled":"1"},
-    {"id":"125","ou_id":"4","hostname":"lab1pc00","enabled":"1"},
-    {"id":"126","ou_id":"4","hostname":"lab1pc01","enabled":"1"},
-    {"id":"127","ou_id":"4","hostname":"lab1pc02","enabled":"1"},
-    {"id":"128","ou_id":"4","hostname":"lab1pc03","enabled":"1"},
-    {"id":"129","ou_id":"4","hostname":"lab1pc04","enabled":"1"},
+    {"id":"124","ou_id":"4","hostname":"lab1pc02","enabled":"1"},
+    {"id":"125","ou_id":"4","hostname":"lab1pc03","enabled":"1"},
+    {"id":"126","ou_id":"4","hostname":"lab1pc04","enabled":"1"},
+    {"id":"127","ou_id":"4","hostname":"lab1pc05","enabled":"1"},
+    {"id":"128","ou_id":"4","hostname":"lab1pc06","enabled":"1"},
+    {"id":"129","ou_id":"4","hostname":"lab1pc07","enabled":"1"},
+    {"id":"130","ou_id":"4","hostname":"lab1pc08","enabled":"1"},
     {"id":"200","ou_id":"13","hostname":"192.168.78.1","enabled":"1"},
     {"id":"201","ou_id":"13","hostname":"192.168.78.100","enabled":"1"},
     {"id":"202","ou_id":"13","hostname":"192.168.78.199","enabled":"1"}
