@@ -331,7 +331,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# build libssh.4.dylib into Examtor directory.\n\n# cmake is required! (brew install cmake ...)\nexport PATH=/usr/local/bin:$PATH\n\nif [ ! -f libssh.4.dylib ]; then\n\n  git clone git://git.libssh.org/projects/libssh.git libssh\n  cd libssh\n  mkdir build\n  cd build\n  cmake -DWITH_ZLIB=OFF -DOPENSSL_INCLUDE_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include -DCMAKE_INSTALL_PREFIX=../../libssh-built -DCMAKE_INSTALL_NAME_DIR=@executable_path ..\n  make -j8\n  make install\n  cd ../..\n  cp libssh-built/lib/libssh.4.dylib .\n  rm -rf libssh libssh-built\n\nfi";
+			shellScript = "# build libssh.4.dylib into Examtor directory.\n\n# cmake is required! (brew install cmake ...)\nexport PATH=/usr/local/bin:$PATH\n\nif [ ! -f libssh.4.dylib ]; then\n\n  git clone git://git.libssh.org/projects/libssh.git libssh\n  cd libssh\n  mkdir build\n  cd build\n  cmake -DWITH_ZLIB=OFF -DOPENSSL_INCLUDE_DIR=${DEVELOPER_SDK_DIR}/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk/usr/include -DCMAKE_INSTALL_PREFIX=../../libssh-built -DCMAKE_INSTALL_NAME_DIR=@executable_path ..\n  make -j8\n  make install\n  cd ../..\n  cp libssh-built/lib/libssh.4.dylib .\n  grep -v '#include <libssh/libssh.h>' libssh-built/include/libssh/callbacks.h > Examator/callbacks.h\n  grep -v '#include \"libssh/legacy.h\"' libssh-built/include/libssh/libssh.h > Examator/libssh.h\n  cp libssh-built/include/libssh/{sftp,ssh2}.h Examator\n  rm -rf libssh libssh-built\n\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
