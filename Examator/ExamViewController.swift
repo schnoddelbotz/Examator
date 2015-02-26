@@ -18,6 +18,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   @IBOutlet weak var currentTimeLabel: NSTextField!
   @IBOutlet weak var redBottomMessageLabel: NSTextField!
   @IBOutlet weak var backupLoopCheckbox: NSButton!
+  @IBOutlet weak var runCommandMenuEntry: NSMenuItem!
   
   @IBOutlet weak var hostArrayCtrl: NSArrayController!
   
@@ -33,6 +34,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     NSTimer.scheduledTimerWithTimeInterval(5.00, target: self, selector: "updateClientStatus", userInfo: nil, repeats: true)
     // gnah... needs to start/stop on checkbox state - otherwise checking will not take instant full backup...
     NSTimer.scheduledTimerWithTimeInterval(30.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
+    self.runCommandMenuEntry.hidden = false
   }
   
   func updateClock() {
