@@ -49,6 +49,25 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     }
   }
   
+  @IBAction func runRemoteCommandPopup(sender: AnyObject) {
+    let alert = NSAlert()
+    alert.messageText = "Run remote command"
+    alert.informativeText = "Provide command to be executed on selected hosts." +
+      "The first line of output will be shown in GUI (notyet)"
+    alert.addButtonWithTitle("Wait, what?")
+    alert.addButtonWithTitle("Seems legit")
+
+    let textField : NSTextField = NSTextField()
+    textField.setFrameSize(NSSize(width: 300, height: 24))
+    textField.stringValue = "du -sk results"
+
+    alert.accessoryView = textField
+    if (alert.runModal() == NSAlertFirstButtonReturn) {
+      // FIXME
+      // run sshRemoteExec with textField.stringValue as command
+    }
+  }
+
   func runFullBackupLoopIteration() {
     // this should ...
     // - define a name for current backup folder (timestamped)
