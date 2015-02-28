@@ -14,12 +14,17 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   dynamic var backupLoopEnabled: Bool = false
   let gdefaults = NSUserDefaults.standardUserDefaults()
   var fullBackupRunning: Bool = false
+  var backupTimer : NSTimer = NSTimer()
+  var pStart : NSDate = NSDate() // why not access SVC.plannedStart?
+  var pStop  : NSDate = NSDate()
+  var totalMinutes : Int = 0
   
   @IBOutlet weak var currentTimeLabel: NSTextField!
   @IBOutlet weak var redBottomMessageLabel: NSTextField!
   @IBOutlet weak var backupLoopCheckbox: NSButton!
   @IBOutlet weak var runCommandMenuEntry: NSMenuItem!
-  
+  @IBOutlet weak var nextBackupCountdownLabel: NSTextField!
+  @IBOutlet weak var timeLeftLabel: NSTextField!
   @IBOutlet weak var hostArrayCtrl: NSArrayController!
   
   required init?(coder: NSCoder) {
@@ -33,8 +38,14 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     NSTimer.scheduledTimerWithTimeInterval(1.00, target: self, selector: "updateClock", userInfo: nil, repeats: true)
     NSTimer.scheduledTimerWithTimeInterval(15.00, target: self, selector: "updateClientStatus", userInfo: nil, repeats: true)
     // gnah... needs to start/stop on checkbox state - otherwise checking will not take instant full backup...
-    NSTimer.scheduledTimerWithTimeInterval(120.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
+    backupTimer = NSTimer.scheduledTimerWithTimeInterval(120.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
     self.runCommandMenuEntry.hidden = false
+    //self.nextBackupCountdownLabel.hidden = true
+    pStart = self.gdefaults.valueForKey(plannedStartKey) as NSDate
+    pStop  = self.gdefaults.valueForKey(plannedStopKey) as NSDate
+    totalMinutes = Int(pStop.timeIntervalSinceDate(pStart)/60)
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
   }
   
   func updateClock() {
@@ -49,6 +60,13 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     } else {
      currentTimeLabel.stringValue = "\(hour).\(minutes)"
     }
+    //
+    let nextBackupInSeconds = Int(backupTimer.fireDate.timeIntervalSinceDate(date))
+    nextBackupCountdownLabel.stringValue = "Next backup in \(nextBackupInSeconds) seconds"
+    //
+    // FIXME: use acuatlStop (notyet) instead of pStop
+    let leftMinutes = Int(abs(pStop.timeIntervalSinceDate(date))/60)
+    timeLeftLabel.stringValue = "\(leftMinutes) of \(totalMinutes) minutes left"
   }
   
   @IBAction func runRemoteCommandPopup(sender: AnyObject) {
@@ -97,8 +115,13 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
           // FIXME
           dispatch_async(dispatch_get_main_queue()) {
             //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
+            let nowTime = NSDate()
+            let calendar = NSCalendar.currentCalendar()
+            let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: nowTime)
+            let nowString = String(format: "%02d:%02d:%02d", components.hour, components.minute, components.second)
             // if 0 result files present, then orange-x
             host.lastBackup = "\(diceRollFiles) files"
+            host.backupStatus = "\(nowString)"
             host.backupStatusImage = NSImage(named: "arrow-down.png")!
           }
         }
@@ -154,7 +177,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
           case ServerSessionInitError:
             host.backupStatus = "Server error"
           case ServerKeyKnownOK:
-            host.backupStatus = "SSH OK"
+            //host.backupStatus = "SSH OK"
             host.statusLabelColor = NSColor.blackColor()
             host.actionStatusImage = NSImage(named: "success.png")!
             // should update hosts stats label with remoteExec output

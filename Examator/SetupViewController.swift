@@ -34,6 +34,8 @@ class SetupViewController: NSViewController {
     exercisesPathTextbox.stringValue = gdefaults.stringForKey(exercisesStoragePathKey)!
     sshIdentityTextbox.stringValue   = gdefaults.stringForKey(sshIdentityKey)!
     sshUsernameTextbox.stringValue   = gdefaults.stringForKey(sshUsernameKey)!
+    plannedStart = gdefaults.valueForKey(plannedStartKey) as NSDate
+    plannedStop  = gdefaults.valueForKey(plannedStopKey) as NSDate
   }
 
   required init?(coder: NSCoder) {
@@ -67,6 +69,9 @@ class SetupViewController: NSViewController {
     gdefaults.setObject(sshUsernameTextbox.stringValue, forKey:sshUsernameKey)
     gdefaults.setObject(exercisesPathTextbox.stringValue, forKey:exercisesStoragePathKey)
     gdefaults.setObject(resultsPathTextbox.stringValue, forKey:resultsStoragePathKey)
+    gdefaults.setObject(plannedStart, forKey:plannedStartKey)
+    gdefaults.setObject(plannedStop, forKey:plannedStopKey)
+    
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle // may suck for weird userprefs
     let selectedRooms = myTableView.selectedRowIndexes

@@ -331,18 +331,6 @@
                             </objectValues>
                         </comboBoxCell>
                     </comboBox>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7cf-u2-Yu7">
-                        <rect key="frame" x="290" y="71" width="221" height="23"/>
-                        <animations/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Backup loop not started!" id="o5Q-2h-xUW">
-                            <font key="font" size="18" name="HelveticaNeue-Bold"/>
-                            <color key="textColor" red="0.90588235294117647" green="0.034201950627189885" blue="0.11071325451008386" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="zf7-JK-yxs" name="hidden" keyPath="self.backupLoopEnabled" id="BTg-jU-SRK"/>
-                        </connections>
-                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gZf-4X-bby">
                         <rect key="frame" x="20" y="524" width="141" height="14"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Number of users planned:" id="9dX-9d-Na6">
@@ -397,6 +385,41 @@
                             <binding destination="WcU-j4-Uci" name="value" keyPath="self.numberOfExamHosts" id="o66-4F-2cw"/>
                         </connections>
                     </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7cf-u2-Yu7">
+                        <rect key="frame" x="290" y="71" width="221" height="23"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Backup loop not started!" id="o5Q-2h-xUW">
+                            <font key="font" size="18" name="HelveticaNeue-Bold"/>
+                            <color key="textColor" red="0.90588235294117647" green="0.034201950627189885" blue="0.11071325451008386" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="zf7-JK-yxs" name="hidden" keyPath="self.backupLoopEnabled" id="BTg-jU-SRK"/>
+                        </connections>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bdd-cW-b8y">
+                        <rect key="frame" x="341" y="77" width="117" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Next backup in ..." id="hRx-FZ-Z7A">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="zf7-JK-yxs" name="hidden" keyPath="self.backupLoopEnabled" id="2wZ-rx-Dbz">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H65-z4-9pT">
+                        <rect key="frame" x="369" y="524" width="62" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Time left" id="urR-7F-68a">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="7xX-6s-qeq" secondAttribute="bottom" constant="100" id="0kn-s8-7VQ"/>
@@ -404,11 +427,13 @@
                     <constraint firstItem="zm4-bK-2bL" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="22" id="3X5-oX-d3u"/>
                     <constraint firstItem="1ja-FF-Zq5" firstAttribute="top" secondItem="MCg-rI-G2w" secondAttribute="bottom" constant="1" id="3yR-uM-8V7"/>
                     <constraint firstItem="G3z-38-UYR" firstAttribute="top" secondItem="qjL-0J-CI4" secondAttribute="bottom" constant="1" id="4kT-Ni-TyQ"/>
+                    <constraint firstItem="kZG-7A-78Q" firstAttribute="top" secondItem="7xX-6s-qeq" secondAttribute="bottom" constant="6" id="7PI-Ri-yRL"/>
                     <constraint firstAttribute="trailing" secondItem="uFb-N5-lIY" secondAttribute="trailing" constant="20" id="8Pb-EC-es2"/>
                     <constraint firstItem="7xX-6s-qeq" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="100" id="Bbk-jq-WTb"/>
                     <constraint firstItem="qjL-0J-CI4" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="16" id="Bcx-Du-hhg"/>
                     <constraint firstItem="gZf-4X-bby" firstAttribute="top" secondItem="jGf-1p-FtX" secondAttribute="bottom" constant="21" id="C2e-g9-mzN"/>
                     <constraint firstItem="s4u-pO-sya" firstAttribute="top" secondItem="1ja-FF-Zq5" secondAttribute="bottom" constant="25" id="CBg-Yt-ApN"/>
+                    <constraint firstAttribute="centerX" secondItem="H65-z4-9pT" secondAttribute="centerX" id="Cgl-J9-hmH"/>
                     <constraint firstItem="jGf-1p-FtX" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="EXY-to-pnZ"/>
                     <constraint firstItem="SLt-rm-dEC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="GnB-rc-FZh"/>
                     <constraint firstAttribute="centerX" secondItem="cE0-6L-5gR" secondAttribute="centerX" id="HQH-WF-Dw6"/>
@@ -434,9 +459,10 @@
                     <constraint firstItem="l1E-0l-gFa" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="YHc-rr-PwF"/>
                     <constraint firstItem="KcC-Dm-ypb" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="YjZ-A4-Exj"/>
                     <constraint firstItem="7xX-6s-qeq" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="ZT4-p8-4fS"/>
+                    <constraint firstItem="Bdd-cW-b8y" firstAttribute="top" secondItem="7xX-6s-qeq" secondAttribute="bottom" constant="6" id="a6e-ea-bDX"/>
                     <constraint firstAttribute="trailing" secondItem="rno-6B-0zq" secondAttribute="trailing" constant="20" id="csQ-5q-yKz"/>
                     <constraint firstAttribute="centerX" secondItem="QMq-0w-181" secondAttribute="centerX" id="eBe-lH-gDR"/>
-                    <constraint firstItem="RE5-ao-TVT" firstAttribute="top" secondItem="kZG-7A-78Q" secondAttribute="bottom" constant="8" id="iMY-ye-Lho"/>
+                    <constraint firstItem="7xX-6s-qeq" firstAttribute="top" secondItem="H65-z4-9pT" secondAttribute="bottom" constant="24" id="g9B-mX-0ju"/>
                     <constraint firstAttribute="bottom" secondItem="7cf-u2-Yu7" secondAttribute="bottom" constant="71" id="jLb-GJ-sCL"/>
                     <constraint firstAttribute="trailing" secondItem="1ja-FF-Zq5" secondAttribute="trailing" constant="173" id="jyj-rk-yU2"/>
                     <constraint firstAttribute="trailing" secondItem="s4u-pO-sya" secondAttribute="trailing" constant="45" id="n0Y-cU-pN8"/>
@@ -446,6 +472,7 @@
                     <constraint firstAttribute="trailing" secondItem="7xX-6s-qeq" secondAttribute="trailing" id="uDN-7E-zmf"/>
                     <constraint firstAttribute="centerX" secondItem="SLt-rm-dEC" secondAttribute="centerX" id="wLF-rm-oNW"/>
                     <constraint firstItem="uFb-N5-lIY" firstAttribute="top" secondItem="KcC-Dm-ypb" secondAttribute="bottom" constant="21" id="wNO-kX-5uO"/>
+                    <constraint firstAttribute="centerX" secondItem="Bdd-cW-b8y" secondAttribute="centerX" id="wry-F4-rsu"/>
                     <constraint firstItem="jGf-1p-FtX" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="xp4-KW-gNu"/>
                     <constraint firstAttribute="trailing" secondItem="pCo-xy-qxe" secondAttribute="trailing" constant="20" id="xuB-u1-HRG"/>
                     <constraint firstItem="fLK-cI-JZw" firstAttribute="leading" secondItem="RE5-ao-TVT" secondAttribute="trailing" constant="4" id="ypg-WS-r7a"/>
@@ -809,8 +836,12 @@
                 <outlet property="backupLoopCheckbox" destination="QMq-0w-181" id="W0n-nS-Mp9"/>
                 <outlet property="currentTimeLabel" destination="SLt-rm-dEC" id="Ud7-lB-iLY"/>
                 <outlet property="hostArrayCtrl" destination="1B3-42-9la" id="FKS-O4-0v6"/>
+                <outlet property="nextBackupCountdownLabel" destination="Bdd-cW-b8y" id="OhY-dc-ocf"/>
+                <outlet property="plannedStart" destination="WmS-3q-WY3" id="0tW-3c-W2N"/>
+                <outlet property="plannedStop" destination="uH3-x7-4FB" id="mEa-GU-HSN"/>
                 <outlet property="redBottomMessageLabel" destination="7cf-u2-Yu7" id="xJC-Pn-mHi"/>
                 <outlet property="runCommandMenuEntry" destination="BOF-NM-1cW" id="2fo-UB-A0f"/>
+                <outlet property="timeLeftLabel" destination="H65-z4-9pT" id="07k-7s-CWl"/>
                 <outlet property="view" destination="EiT-Mj-1SZ" id="YWH-SX-uhE"/>
             </connections>
         </viewController>
@@ -953,7 +984,6 @@
                 <string>lastBackup</string>
                 <string>backupStatusImage</string>
                 <string>actionStatusImage</string>
-                <string>systemStatusImage</string>
                 <string>statusLabelColor</string>
                 <string>sshStatus</string>
             </declaredKeys>

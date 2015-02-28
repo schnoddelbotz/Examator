@@ -8,6 +8,7 @@
 
 import Cocoa
 // import Swift <- cmd/alt-click ... e.g. find()!
+// log NSSystemClockDidChangeNotification ?
 
 // app-global variables
 let resultsStoragePathKey   = "resultsStoragePath"
@@ -16,6 +17,8 @@ let sshUsernameKey = "sshUsername"
 let sshIdentityKey = "sshIdentity"
 let idKey = "id"
 let nameKey = "name"
+let plannedStartKey = "plannedStart"
+let plannedStopKey = "plannedStop"
 var settingsConfirmed : Bool = false
 var examRoomArray : [ExamRoom] = []
 
@@ -45,13 +48,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     udefaults.setObject("~/exam-tasks-and-resources", forKey:exercisesStoragePathKey)
     udefaults.setObject("student", forKey:sshUsernameKey)
     udefaults.setObject("~/.ssh/id_dsa", forKey:sshIdentityKey)
+    udefaults.setObject(NSDate(), forKey: plannedStartKey)
+    udefaults.setObject(NSDate(), forKey: plannedStopKey)
     NSUserDefaults.standardUserDefaults().registerDefaults(udefaults)
     loadBundledJSONRoomdata()
-    
-    //var localPath = "/tmp/foo"
-    //var remotePath = "nas:/tmp/bar"
-    //NSLog("AppDelegate init() test ssh scp ...")
-    //scpFetchFile((localPath as NSString).UTF8String,(remotePath as NSString).UTF8String)
   }
   
   func loadBundledJSONRoomdata() {
