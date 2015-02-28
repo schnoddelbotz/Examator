@@ -31,9 +31,9 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     super.viewDidAppear()
     // start timers
     NSTimer.scheduledTimerWithTimeInterval(1.00, target: self, selector: "updateClock", userInfo: nil, repeats: true)
-    NSTimer.scheduledTimerWithTimeInterval(5.00, target: self, selector: "updateClientStatus", userInfo: nil, repeats: true)
+    NSTimer.scheduledTimerWithTimeInterval(15.00, target: self, selector: "updateClientStatus", userInfo: nil, repeats: true)
     // gnah... needs to start/stop on checkbox state - otherwise checking will not take instant full backup...
-    NSTimer.scheduledTimerWithTimeInterval(30.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
+    NSTimer.scheduledTimerWithTimeInterval(120.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
     self.runCommandMenuEntry.hidden = false
   }
   
@@ -94,15 +94,9 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
           let diceRoll = useconds_t(arc4random_uniform(5000000))
           let diceRollFiles = Int(arc4random_uniform(20))
           // FIXME
-          // this just tests rexec right now
-          var remoteCommand = "echo -n \"pid $$ on $(hostname) uptime \" ; uptime -s | cut -d' ' -f2"
-          let username = self.gdefaults.stringForKey(sshUsernameKey)!
-          let res = sshRemoteExec((host.hostname as NSString).UTF8String,(remoteCommand as NSString).UTF8String, (username as NSString).UTF8String )
-          // self.gdefaults.stringForKey(sshUsernameKey)
           dispatch_async(dispatch_get_main_queue()) {
             //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
-            host.backupStatus = "x\(diceRoll)"
-            host.lastBackup = "\(diceRollFiles) files"
+            host.lastBackup = "\(diceRoll) files"
           }
         }
       }
@@ -132,6 +126,42 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     let statusCode = Int(arc4random_uniform(999)) + 1
     hostArray[diceRoll].lastBackup = "\(statusCode) files"
     */
+    for (host) in hostArray {
+      dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { // 1
+        // exec rsync pull ...
+        var remoteCommand = "echo -n \"pid $$ on $(hostname) uptime \" ; uptime -s | cut -d' ' -f2"
+        let username = self.gdefaults.stringForKey(sshUsernameKey)!
+        let res = sshRemoteExec((host.hostname as NSString).UTF8String,(remoteCommand as NSString).UTF8String, (username as NSString).UTF8String )
+
+        dispatch_async(dispatch_get_main_queue()) {
+          //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
+          host.statusLabelColor = NSColor.redColor()
+          switch res {
+          case ServerConnectionError:
+            host.backupStatus = "No connection"
+          case ServerKeyNotKnown:
+            host.backupStatus = "Untrusted"
+          case ServerKeyError:
+            host.backupStatus = "Key error"
+          case ServerKeyChanged:
+            host.backupStatus = "Key mismatch"
+          case ServerKeyFoundOther:
+            host.backupStatus = "Other key found"
+          case ServerAuthErrorPubKey:
+            host.backupStatus = "PubKey error"
+          case ServerAuthErrorOther:
+            host.backupStatus = "Auth error"
+          case ServerSessionInitError:
+            host.backupStatus = "Server error"
+          case ServerKeyKnownOK:
+            host.backupStatus = "SSH OK"
+            host.statusLabelColor = NSColor.blackColor()
+            // should update hosts stats label with remoteExec output
+          default:
+            host.backupStatus = "%-(" // shouldn't happen
+          }
+        }
+      }
+    }
   }
-  
 }

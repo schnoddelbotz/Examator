@@ -23,7 +23,7 @@
 #include "ssh2.h"
 
 #include "Examator-Bridging-Header.h"
-ssh_session connect_ssh(const char *hostname, const char *user, int verbosity);
+ssh_session connect_ssh(const char *hostname, const char *user, int *connResult);
 
 static int verbosity=0;
 
@@ -83,10 +83,10 @@ int *scpFetchFile(const char *localName, const char *remoteName) {
   ssh_free(session);
   ssh_finalize();
   */
-  
+
   // test remote exec
   // sshRemoteExec("nas","uptime -s | cut -d' ' -f2");
-  
+
   return 0;
 }
 
@@ -165,40 +165,38 @@ int sshRemoteExec(const char *host, const char *command, const char* username) {
   char buffer[256];
   int nbytes;
   int rc;
-  
+
   // this retval should be returned...
   //int *retval = malloc(sizeof *retval);
   // and back in swift,
   // CFfree(ptr) -- fixme, function currently returns int, not int*
-  
+
   // printf("Executing on %s: '%s'\n", host, command);
-  
+
   // retry silently? how to report back connect error vs exec error...?
-  session = connect_ssh(host, username, 0);
+  int cResult = -9;
+  session = connect_ssh(host, username, &cResult);
   if (session == NULL) {
-    //ssh_finalize();
-    printf("OOOPS: no conn on %s (as %s)\n", host, username);
-    return 1;
+    return cResult;
   }
-  
+
   channel = ssh_channel_new(session);;
   if (channel == NULL) {
     ssh_disconnect(session);
     ssh_free(session);
-    // ssh_finalize(); // docs say only at end of app...
-    return 1;
+    return 2;
   }
-  
+
   rc = ssh_channel_open_session(channel);
   if (rc < 0) {
     goto failed;
   }
-  
+
   rc = ssh_channel_request_exec(channel, command);
   if (rc < 0) {
     goto failed;
   }
-  
+
   nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
   while (nbytes > 0) {
     // fixme ... should be returned to swift
@@ -207,85 +205,42 @@ int sshRemoteExec(const char *host, const char *command, const char* username) {
     }
     nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
   }
-  
+
   if (nbytes < 0) {
     goto failed;
   }
-  
+
   ssh_channel_send_eof(channel);
   ssh_channel_close(channel);
   ssh_channel_free(channel);
   ssh_disconnect(session);
   ssh_free(session);
-  
+
   return 0;
 failed:
   ssh_channel_close(channel);
   ssh_channel_free(channel);
   ssh_disconnect(session);
   ssh_free(session);
-  
-  return 1;
+
+  return 3;
 }
 
 int verify_knownhost(ssh_session session){
-  char *hexa;
-  int state;
-  unsigned char *hash = NULL;
-  size_t hlen;
-  ssh_key srv_pubkey;
-  int rc;
-  
-  state=ssh_is_server_known(session);
-  
-  rc = ssh_get_publickey(session, &srv_pubkey);
-  if (rc < 0) {
-    return -1;
-  }
-  
-  rc = ssh_get_publickey_hash(srv_pubkey,
-                              SSH_PUBLICKEY_HASH_SHA1,
-                              &hash,
-                              &hlen);
-  ssh_key_free(srv_pubkey);
-  if (rc < 0) {
-    return -1;
-  }
-  
-  switch(state){
+  switch(ssh_is_server_known(session)){
     case SSH_SERVER_KNOWN_OK:
-      break; /* ok */
+      return ServerKeyKnownOK;
     case SSH_SERVER_KNOWN_CHANGED:
-      fprintf(stderr,"Host key for server changed : server's one is now :\n");
-      ssh_print_hexa("Public key hash",hash, hlen);
-      ssh_clean_pubkey_hash(&hash);
-      fprintf(stderr,"For security reason, connection will be stopped\n");
-      return -1;
+      return ServerKeyChanged;
     case SSH_SERVER_FOUND_OTHER:
-      fprintf(stderr,"The host key for this server was not found but an other type of key exists.\n");
-      fprintf(stderr,"An attacker might change the default server key to confuse your client"
-              "into thinking the key does not exist\n"
-              "We advise you to rerun the client with -d or -r for more safety.\n");
-      return -1;
+      return ServerKeyFoundOther;
     case SSH_SERVER_FILE_NOT_FOUND:
-      fprintf(stderr,"Could not find known host file. If you accept the host key here,\n");
-      fprintf(stderr,"the file will be automatically created.\n");
       /* fallback to SSH_SERVER_NOT_KNOWN behavior */
     case SSH_SERVER_NOT_KNOWN:
-      hexa = ssh_get_hexa(hash, hlen);
-      fprintf(stderr,"The server is unknown. Trust must be established outside Examator! (ssh-keyscan!)\n");
-      fprintf(stderr, "Public key hash: %s\n", hexa);
-      ssh_string_free_char(hexa);
-      ssh_clean_pubkey_hash(&hash);
-      return -1;
-      break;
-    case SSH_SERVER_ERROR:
-      ssh_clean_pubkey_hash(&hash);
-      fprintf(stderr,"%s",ssh_get_error(session));
-      return -1;
+      return ServerKeyNotKnown;
+    default:
+      return ServerKeyError;
   }
-  ssh_clean_pubkey_hash(&hash);
-  return 0;
 }
 
 static void error(ssh_session session){
@@ -295,14 +250,14 @@ static void error(ssh_session session){
 int authenticate_pubkey(ssh_session session){
   int rc;
   int method;
-  
+
   // Try to authenticate
   rc = ssh_userauth_none(session, NULL);
   if (rc == SSH_AUTH_ERROR) {
     error(session);
     return rc;
   }
-  
+
   method = ssh_userauth_list(session, NULL);
   // Try to authenticate with public key first
   if (method & SSH_AUTH_METHOD_PUBLICKEY) {
@@ -316,17 +271,19 @@ int authenticate_pubkey(ssh_session session){
   } else {
     printf("Yikes! the server does not support pubkey auth?\n");
   }
-  
+
   return rc;
 }
 
-ssh_session connect_ssh(const char *host, const char *user,int verbosity){
+ssh_session connect_ssh(const char *host, const char *user,int *connResult){
   ssh_session session;
   int auth=0;
-  
+
   session=ssh_new();
-  if (session == NULL)
+  if (session == NULL) {
+    *connResult = ServerSessionInitError;
     return NULL;
+  }
 
   // http://api.libssh.org/master/group__libssh__session.html#ga7a801b85800baa3f4e16f5b47db0a73d
   //SSH_OPTIONS_IDENTITY: Set the identity file name (const char *,format string).
@@ -336,26 +293,30 @@ ssh_session connect_ssh(const char *host, const char *user,int verbosity){
   ssh_options_set(session, SSH_OPTIONS_USER, user);
   ssh_options_set(session, SSH_OPTIONS_HOST, host);
   ssh_options_set(session, SSH_OPTIONS_LOG_VERBOSITY, &verbosity);
-  
+
+  *connResult = ServerConnectionError;
   if(ssh_connect(session)){
-    fprintf(stderr,"Connection failed : %s\n",ssh_get_error(session));
     ssh_disconnect(session);
     ssh_free(session);
     return NULL;
   }
-  if(verify_knownhost(session)<0){
+
+  *connResult = verify_knownhost(session);
+  if(*connResult != ServerKeyKnownOK){
     ssh_disconnect(session);
     ssh_free(session);
     return NULL;
   }
+
   auth=authenticate_pubkey(session);
   if(auth==SSH_AUTH_SUCCESS){
     return session;
   } else if(auth==SSH_AUTH_DENIED){
-    fprintf(stderr,"Pubkey-Auth failed, check hostkeys!\n");
+    *connResult = ServerAuthErrorPubKey;
   } else {
-    fprintf(stderr,"Error while authenticating : %s\n",ssh_get_error(session));
+    *connResult = ServerAuthErrorOther;
   }
+
   ssh_disconnect(session);
   ssh_free(session);
   return NULL;
@@ -409,7 +370,7 @@ int do_copy(struct location *src, struct location *dest, int recursive){
       }
     } while(r != SSH_SCP_REQUEST_NEWFILE);
   }
-  
+
   if(dest->is_ssh){
     r=ssh_scp_push_file(dest->scp,src->path, size, mode);
     //  snprintf(buffer,sizeof(buffer),"C0644 %d %s\n",size,src->path);
@@ -472,7 +433,7 @@ int do_copy(struct location *src, struct location *dest, int recursive){
       }
     }
     total+=r;
-    
+
   } while(total < size);
   ssh_string_free_char(filename);
   printf("wrote %d bytes\n",total);
@@ -480,8 +441,9 @@ int do_copy(struct location *src, struct location *dest, int recursive){
 }
 
 int open_location(struct location *loc, int flag){
+  int verbose = 0;
   if(loc->is_ssh && flag==WRITE){
-    loc->session=connect_ssh(loc->host,loc->user,verbosity);
+    loc->session=connect_ssh(loc->host,loc->user,&verbose);
     if(!loc->session){
       fprintf(stderr,"Couldn't connect to %s\n",loc->host);
       return -1;
@@ -499,7 +461,7 @@ int open_location(struct location *loc, int flag){
     }
     return 0;
   } else if(loc->is_ssh && flag==READ){
-    loc->session=connect_ssh(loc->host, loc->user,verbosity);
+    loc->session=connect_ssh(loc->host, loc->user,&verbose);
     if(!loc->session){
       fprintf(stderr,"Couldn't connect to %s\n",loc->host);
       return -1;

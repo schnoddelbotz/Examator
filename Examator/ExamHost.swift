@@ -15,6 +15,7 @@ class ExamHost: NSObject {
   dynamic var backupStatus = "No Backup!"
   dynamic var lastBackup = "n/a"
   dynamic var clientStatus : Int = -1
+  dynamic var statusLabelColor : NSColor
   dynamic var room : ExamRoom
 
   dynamic var backupStatusImage: NSImage // -none, -iscurrent, -istooold
@@ -26,6 +27,7 @@ class ExamHost: NSObject {
     actionStatusImage = NSImage(named: "rescan.tif")!
     systemStatusImage = NSImage(named: "save.tif")!
     room = ExamRoom()
+    statusLabelColor = NSColor.blackColor()
     super.init()
   }
 }
