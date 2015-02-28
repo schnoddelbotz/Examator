@@ -12,9 +12,9 @@ class ExamHost: NSObject {
   dynamic var hostname = "uninitializedHostname" // IP welcome here, too
   dynamic var username = "unavailable"
   dynamic var userRealname = "Esteban Sanchez-Diaz"
-  dynamic var backupStatus = "No Backup!"
+  dynamic var backupStatus = "n/a - wait"
   dynamic var lastBackup = "n/a"
-  dynamic var clientStatus : Int = -1
+  dynamic var sshStatus : Int = -1
   dynamic var statusLabelColor : NSColor
   dynamic var room : ExamRoom
 
@@ -23,9 +23,9 @@ class ExamHost: NSObject {
   dynamic var systemStatusImage: NSImage // background: ssh-user-ping-ok, no-ssh, no-ping
   
   override init() {
-    backupStatusImage = NSImage(named: "save.tif")!
-    actionStatusImage = NSImage(named: "rescan.tif")!
-    systemStatusImage = NSImage(named: "save.tif")!
+    backupStatusImage = NSImage(named: "status-warning.png")!
+    actionStatusImage = NSImage(named: "unknown.png")!
+    systemStatusImage = NSImage(named: "unknown.png")!
     room = ExamRoom()
     statusLabelColor = NSColor.blackColor()
     super.init()

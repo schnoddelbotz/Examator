@@ -86,17 +86,20 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     if (backupLoopCheckbox.state==1) {
       NSLog("FULLBACKUP triggerd, ignoring selection: %@", hostArrayCtrl.selectionIndexes)
       // waiting for incrementals to finish... then
-      // foreach client
       for (host) in hostArray {
-        // fixme: test if host.clientStatus (notyet) tells us to even try to fetch a backup
+        if (host.sshStatus != Int(ServerKeyKnownOK)) {
+          // NSLog("SKIP host %@ as not ok state ...", host.hostname)
+          continue
+        }
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { // 1
-          // exec rsync pull ...
-          let diceRoll = useconds_t(arc4random_uniform(5000000))
           let diceRollFiles = Int(arc4random_uniform(20))
+          host.backupStatusImage = NSImage(named: "wheel.gif")!
           // FIXME
           dispatch_async(dispatch_get_main_queue()) {
             //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
-            host.lastBackup = "\(diceRoll) files"
+            // if 0 result files present, then orange-x
+            host.lastBackup = "\(diceRollFiles) files"
+            host.backupStatusImage = NSImage(named: "arrow-down.png")!
           }
         }
       }
@@ -119,16 +122,10 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     //   * diskfree
     // - update ExamHostItem/display
     // - sets some kind of 'backuploopWorthy' property
-    //NSLog("FAKE!")
-    /*
-    let numHosts = (UInt32)(hostArray.count)
-    let diceRoll = Int(arc4random_uniform(numHosts))
-    let statusCode = Int(arc4random_uniform(999)) + 1
-    hostArray[diceRoll].lastBackup = "\(statusCode) files"
-    */
     for (host) in hostArray {
-      dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { // 1
-        // exec rsync pull ...
+
+      dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) {
+        host.actionStatusImage = NSImage(named:"wheel.gif")!
         var remoteCommand = "echo -n \"pid $$ on $(hostname) uptime \" ; uptime -s | cut -d' ' -f2"
         let username = self.gdefaults.stringForKey(sshUsernameKey)!
         let res = sshRemoteExec((host.hostname as NSString).UTF8String,(remoteCommand as NSString).UTF8String, (username as NSString).UTF8String )
@@ -136,9 +133,12 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
         dispatch_async(dispatch_get_main_queue()) {
           //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
           host.statusLabelColor = NSColor.redColor()
+          host.actionStatusImage = NSImage(named:"status-error.png")!
+          host.sshStatus = Int(res)
           switch res {
           case ServerConnectionError:
             host.backupStatus = "No connection"
+            host.actionStatusImage = NSImage(named:"status-error.png")!
           case ServerKeyNotKnown:
             host.backupStatus = "Untrusted"
           case ServerKeyError:
@@ -156,6 +156,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
           case ServerKeyKnownOK:
             host.backupStatus = "SSH OK"
             host.statusLabelColor = NSColor.blackColor()
+            host.actionStatusImage = NSImage(named: "success.png")!
             // should update hosts stats label with remoteExec output
           default:
             host.backupStatus = "%-(" // shouldn't happen

@@ -9,10 +9,19 @@
 /* Begin PBXBuildFile section */
 		3D4A80CB1A99560300A5A6EB /* libssh.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */; };
 		3D4A80CE1A99562B00A5A6EB /* libssh.4.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3D4EFDF31AA23A8C002BEE52 /* wheel.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFDF21AA23A8C002BEE52 /* wheel.gif */; };
+		3D4EFE0D1AA24519002BEE52 /* arrow-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE061AA24519002BEE52 /* arrow-down.png */; };
+		3D4EFE0E1AA24519002BEE52 /* arrow-up-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE071AA24519002BEE52 /* arrow-up-down.png */; };
+		3D4EFE0F1AA24519002BEE52 /* arrow-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE081AA24519002BEE52 /* arrow-up.png */; };
+		3D4EFE101AA24519002BEE52 /* status-error.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE091AA24519002BEE52 /* status-error.png */; };
+		3D4EFE111AA24519002BEE52 /* orange-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE0A1AA24519002BEE52 /* orange-x.png */; };
+		3D4EFE131AA24519002BEE52 /* status-warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE0C1AA24519002BEE52 /* status-warning.png */; };
+		3D4EFE151AA24547002BEE52 /* unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFE141AA24547002BEE52 /* unknown.png */; };
 		3D5FED151A948EC9004388B2 /* ExamHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5FED141A948EC9004388B2 /* ExamHostView.swift */; };
 		3D5FED171A9491B7004388B2 /* ExamHostCollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5FED161A9491B7004388B2 /* ExamHostCollectionItem.swift */; };
 		3D63485C1A99373200C57B21 /* SSH.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D63485B1A99373200C57B21 /* SSH.c */; };
 		3D9B8B281A96A5FC00E4E5CF /* ExamRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B8B271A96A5FC00E4E5CF /* ExamRoom.swift */; };
+		3DC3861F1AA24A2D0016E1D4 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC3861E1AA24A2D0016E1D4 /* success.png */; };
 		3DF72E601A93D73A00C9F130 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E5F1A93D73A00C9F130 /* AppDelegate.swift */; };
 		3DF72E621A93D73A00C9F130 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E611A93D73A00C9F130 /* Images.xcassets */; };
 		3DF72E651A93D73A00C9F130 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E631A93D73A00C9F130 /* MainMenu.xib */; };
@@ -21,8 +30,6 @@
 		3DF72E7D1A93EB8900C9F130 /* ExamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E7C1A93EB8900C9F130 /* ExamViewController.swift */; };
 		3DF72E7F1A93ECBC00C9F130 /* roomdata.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E7E1A93ECBC00C9F130 /* roomdata.json */; };
 		3DF72E831A94115E00C9F130 /* ExamHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF72E821A94115E00C9F130 /* ExamHost.swift */; };
-		3DF72E861A94117800C9F130 /* rescan.tif in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E841A94117800C9F130 /* rescan.tif */; };
-		3DF72E871A94117800C9F130 /* save.tif in Resources */ = {isa = PBXBuildFile; fileRef = 3DF72E851A94117800C9F130 /* save.tif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +67,14 @@
 		3D48930B1A995AC300D3121D /* sftp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sftp.h; sourceTree = "<group>"; };
 		3D48930C1A995AC300D3121D /* ssh2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ssh2.h; sourceTree = "<group>"; };
 		3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssh.4.dylib; path = ../libssh.4.dylib; sourceTree = "<group>"; };
+		3D4EFDF21AA23A8C002BEE52 /* wheel.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = wheel.gif; sourceTree = "<group>"; };
+		3D4EFE061AA24519002BEE52 /* arrow-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down.png"; sourceTree = "<group>"; };
+		3D4EFE071AA24519002BEE52 /* arrow-up-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up-down.png"; sourceTree = "<group>"; };
+		3D4EFE081AA24519002BEE52 /* arrow-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up.png"; sourceTree = "<group>"; };
+		3D4EFE091AA24519002BEE52 /* status-error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "status-error.png"; sourceTree = "<group>"; };
+		3D4EFE0A1AA24519002BEE52 /* orange-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orange-x.png"; sourceTree = "<group>"; };
+		3D4EFE0C1AA24519002BEE52 /* status-warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "status-warning.png"; sourceTree = "<group>"; };
+		3D4EFE141AA24547002BEE52 /* unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unknown.png; sourceTree = "<group>"; };
 		3D5FED141A948EC9004388B2 /* ExamHostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamHostView.swift; sourceTree = "<group>"; };
 		3D5FED161A9491B7004388B2 /* ExamHostCollectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamHostCollectionItem.swift; sourceTree = "<group>"; };
 		3D6348591A99369600C57B21 /* libssh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libssh.h; sourceTree = "<group>"; };
@@ -67,6 +82,7 @@
 		3D63485B1A99373200C57B21 /* SSH.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SSH.c; sourceTree = "<group>"; };
 		3D9B8B271A96A5FC00E4E5CF /* ExamRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamRoom.swift; sourceTree = "<group>"; };
 		3DB8B7481A995F9100BFD9F7 /* liblibssh.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = liblibssh.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DC3861E1AA24A2D0016E1D4 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
 		3DF72E5A1A93D73A00C9F130 /* Examator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DF72E5E1A93D73A00C9F130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF72E5F1A93D73A00C9F130 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,8 +95,6 @@
 		3DF72E7C1A93EB8900C9F130 /* ExamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamViewController.swift; sourceTree = "<group>"; };
 		3DF72E7E1A93ECBC00C9F130 /* roomdata.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = roomdata.json; sourceTree = "<group>"; };
 		3DF72E821A94115E00C9F130 /* ExamHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamHost.swift; sourceTree = "<group>"; };
-		3DF72E841A94117800C9F130 /* rescan.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = rescan.tif; sourceTree = "<group>"; };
-		3DF72E851A94117800C9F130 /* save.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = save.tif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,8 +177,15 @@
 		3DF72E5D1A93D73A00C9F130 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3DF72E841A94117800C9F130 /* rescan.tif */,
-				3DF72E851A94117800C9F130 /* save.tif */,
+				3DC3861E1AA24A2D0016E1D4 /* success.png */,
+				3D4EFE141AA24547002BEE52 /* unknown.png */,
+				3D4EFE061AA24519002BEE52 /* arrow-down.png */,
+				3D4EFE071AA24519002BEE52 /* arrow-up-down.png */,
+				3D4EFE081AA24519002BEE52 /* arrow-up.png */,
+				3D4EFE091AA24519002BEE52 /* status-error.png */,
+				3D4EFE0A1AA24519002BEE52 /* orange-x.png */,
+				3D4EFE0C1AA24519002BEE52 /* status-warning.png */,
+				3D4EFDF21AA23A8C002BEE52 /* wheel.gif */,
 				3DF72E7E1A93ECBC00C9F130 /* roomdata.json */,
 				3DF72E5E1A93D73A00C9F130 /* Info.plist */,
 			);
@@ -302,11 +323,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DF72E871A94117800C9F130 /* save.tif in Resources */,
+				3DC3861F1AA24A2D0016E1D4 /* success.png in Resources */,
+				3D4EFE0F1AA24519002BEE52 /* arrow-up.png in Resources */,
 				3DF72E621A93D73A00C9F130 /* Images.xcassets in Resources */,
+				3D4EFE111AA24519002BEE52 /* orange-x.png in Resources */,
+				3D4EFE0D1AA24519002BEE52 /* arrow-down.png in Resources */,
+				3D4EFE0E1AA24519002BEE52 /* arrow-up-down.png in Resources */,
+				3D4EFDF31AA23A8C002BEE52 /* wheel.gif in Resources */,
+				3D4EFE151AA24547002BEE52 /* unknown.png in Resources */,
+				3D4EFE131AA24519002BEE52 /* status-warning.png in Resources */,
 				3DF72E651A93D73A00C9F130 /* MainMenu.xib in Resources */,
+				3D4EFE101AA24519002BEE52 /* status-error.png in Resources */,
 				3DF72E7F1A93ECBC00C9F130 /* roomdata.json in Resources */,
-				3DF72E861A94117800C9F130 /* rescan.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
