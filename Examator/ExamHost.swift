@@ -10,8 +10,8 @@ import Cocoa
 
 class ExamHost: NSObject {
   dynamic var hostname = "uninitializedHostname" // IP welcome here, too
-  dynamic var username = "unavailable"
-  dynamic var userRealname = "Esteban Sanchez-Diaz"
+  dynamic var username = ""
+  dynamic var userRealname = ""
   dynamic var backupStatus = "No backup yet"
   dynamic var lastBackup = "n/a"
   dynamic var sshStatus : Int = -1

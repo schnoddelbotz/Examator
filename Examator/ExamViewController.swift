@@ -9,7 +9,7 @@
 import Cocoa
 
 class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
-  
+
   dynamic var hostArray: Array<ExamHost> = []
   dynamic var backupLoopEnabled: Bool = false
   let gdefaults = NSUserDefaults.standardUserDefaults()
@@ -18,7 +18,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   var pStart : NSDate = NSDate() // why not access SVC.plannedStart?
   var pStop  : NSDate = NSDate()
   var totalMinutes : Int = 0
-  
+
   @IBOutlet weak var currentTimeLabel: NSTextField!
   @IBOutlet weak var redBottomMessageLabel: NSTextField!
   @IBOutlet weak var backupLoopCheckbox: NSButton!
@@ -26,11 +26,11 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   @IBOutlet weak var nextBackupCountdownLabel: NSTextField!
   @IBOutlet weak var timeLeftLabel: NSTextField!
   @IBOutlet weak var hostArrayCtrl: NSArrayController!
-  
+
   required init?(coder: NSCoder) {
     super.init(coder: coder)
   }
-  
+
   override func viewDidAppear() {
     // called when ExamView window opens after setup confirmation
     super.viewDidAppear()
@@ -47,7 +47,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
   }
-  
+
   func updateClock() {
     let date = NSDate()
     let calendar = NSCalendar.currentCalendar()
@@ -68,7 +68,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     let leftMinutes = Int(abs(pStop.timeIntervalSinceDate(date))/60)
     timeLeftLabel.stringValue = "\(leftMinutes) of \(totalMinutes) minutes left"
   }
-  
+
   @IBAction func runRemoteCommandPopup(sender: AnyObject) {
     let alert = NSAlert()
     alert.messageText = "Run remote command"
@@ -91,10 +91,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   func runFullBackupLoopIteration() {
     // this should ...
     // - define a name for current backup folder (timestamped)
-    // - verify if the status thread has marked this host for result collection
     // - sshFetchResource() for every ExamHost student result directory
-    // - update GUI about individual numFiles/lastBackup
-
     if (!settingsConfirmed || fullBackupRunning) {
       // it's a bit ugly like this ... would be nicer to start timers when needed
       // fullBackupRunning is NOT working yet!!!
@@ -106,7 +103,8 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
       // waiting for incrementals to finish... then
       for (host) in hostArray {
         if (host.sshStatus != Int(ServerKeyKnownOK)) {
-          // NSLog("SKIP host %@ as not ok state ...", host.hostname)
+          //NSLog("SKIP host %@ as not in OK state ...", host.hostname)
+          // hack warning: this is also true if no student is logged in
           continue
         }
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { // 1
@@ -135,29 +133,80 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     fullBackupRunning = false
     // maybe a fullBackupTar should be triggered here ... good moment + avoid another timer?
   }
-  
+
+  func doMeError() {
+    NSLog("REMOVE ME WTF");
+  }
+
   func updateClientStatus() {
-    // this should ...
-    // - sshExec on any host a single status command, collecting (JSON?!)
-    //   * memory usage
-    //   * cpu usage, uptime
-    //   * student user logged in (uname/realname)
-    //   * diskfree
-    // - update ExamHostItem/display
-    // - sets some kind of 'backuploopWorthy' property
+    // triggered by timer, polls infos from all clients
+
+    let remoteUsername = self.gdefaults.stringForKey(sshUsernameKey)! as NSString
+    var remoteCommand = "diskfree=`df -h ~ | tail -1 | awk '{print $4}'`;"
+    remoteCommand += "[ -f ~/.exam-setup-user ] && . ~/.exam-setup-user ;"
+    remoteCommand += "memfree=`cat /proc/meminfo | grep MemFree | awk '{print $2}'`;"
+    remoteCommand += "numresults=$((`find results -type f 2>/dev/null | wc -l`));"
+    remoteCommand += "echo -n '{';"
+    remoteCommand += "echo -n '\"hostname\":\"'${HOSTNAME}'\",';"
+    remoteCommand += "echo -n '\"realname\":\"'${REALNAME}'\",';"
+    remoteCommand += "echo -n '\"username\":\"'${LOGINNAME}'\",';"
+    remoteCommand += "echo -n '\"diskfree\":\"'${diskfree}'\",';"
+    remoteCommand += "echo -n '\"memfree\":\"'${memfree}'\",';"
+    remoteCommand += "echo -n '\"numresults\":\"'${numresults}'\"';"
+    remoteCommand += "echo -n '}'"
+    let remoteCommandString : NSString = remoteCommand as NSString
+
     for (host) in hostArray {
 
       dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) {
         host.actionStatusImage = NSImage(named:"wheel.gif")!
-        var remoteCommand = "echo -n \"pid $$ on $(hostname) uptime \" ; uptime -s | cut -d' ' -f2"
-        let username = self.gdefaults.stringForKey(sshUsernameKey)!
-        let res = sshRemoteExec((host.hostname as NSString).UTF8String,(remoteCommand as NSString).UTF8String, (username as NSString).UTF8String )
+
+        let bufferSize = 256
+        var buffer = Array<UInt8>(count: bufferSize, repeatedValue: 0)
+        var retSize = UInt32(0)
+
+        let res = sshRemoteExec((host.hostname as NSString).UTF8String,remoteCommandString.UTF8String, remoteUsername.UTF8String, &buffer, &retSize )
 
         dispatch_async(dispatch_get_main_queue()) {
           //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
           host.statusLabelColor = NSColor.redColor()
           host.actionStatusImage = NSImage(named:"status-error.png")!
-          host.sshStatus = Int(res)
+          host.sshStatus = Int(res) // bug
+          if (res == ServerKeyKnownOK) {
+            var parseError: NSError?
+            //let data = NSData(bytes: buffer, length: bufferSize)
+            let data = NSData(bytes: buffer, length: Int(retSize))
+            let str = NSString(data: data, encoding: NSUTF8StringEncoding)
+            //println("Received \(str!.length) / \(retSize) : \(str!)")
+            //{"hostname":"nas","realname":"Schnoddelbotz","username":"hacker","diskfree":"943G","memfree":"4188648","numresults":"0"}
+            let jsonData : AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
+              options: NSJSONReadingOptions.AllowFragments, error: &parseError)
+            if ((parseError) != nil) {
+              NSLog("JSON ERROR on %@ : %@",host.hostname, parseError!);
+            }
+            else if let json = jsonData as? NSDictionary {
+              if let username = json["username"] as? String {
+                if let realname = json["realname"] as? String {
+                  if (realname != "") {
+                  host.userRealname = realname
+                  host.username = username
+                  } else {
+                    host.username = "Nobody"
+                    host.backupStatusImage = NSImage()
+                    host.sshStatus = -5 /// FIXME ... just skip backup by being non-0
+                  }
+                }
+              }
+              if let memfree = json["memfree"] as? String {
+                if let diskfree = json["diskfree"] as? String {
+                  if let numresults = json["numresults"] as? String {
+                    //host.lastBackup = "M:\(memfree) D:\(diskfree) #:\(numresults)"
+                    host.lastBackup = "\(numresults) results, free:\(diskfree)"
+                  }
+                }
+              }
+            }
+          }
           switch res {
           case ServerConnectionError:
             host.backupStatus = "No connection"

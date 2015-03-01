@@ -934,9 +934,9 @@
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P1T-zC-FdM">
-                    <rect key="frame" x="99" y="0.0" width="78" height="17"/>
+                    <rect key="frame" x="77" y="1" width="100" height="14"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="lastBackup" id="eJS-Ms-mNU">
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="miniSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>

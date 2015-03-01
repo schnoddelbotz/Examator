@@ -19,7 +19,7 @@ int shutdownLibSSH();
 
 // execute command on remote.
 // should be extended to return retval+retString (by ref, mem?)
-int sshRemoteExec(const char *host, const char *command, const char* username);
+int sshRemoteExec(const char *host, const char *command, const char* username, unsigned char *output, unsigned int *outBytes);
 
 // should be scpFetchResourc(supporting file or dir)
 int *scpFetchFile(const char* localName, const char* remoteName);

@@ -159,7 +159,7 @@ end:
   return 0;
 }
 
-int sshRemoteExec(const char *host, const char *command, const char* username) {
+int sshRemoteExec(const char *host, const char *command, const char* username, unsigned char *output, unsigned int *outBytes) {
   ssh_session session;
   ssh_channel channel;
   char buffer[256];
@@ -197,15 +197,19 @@ int sshRemoteExec(const char *host, const char *command, const char* username) {
     goto failed;
   }
 
+  unsigned int bytesWritten = 0;
+  unsigned char *optr = output;
+  memset(buffer, 0, sizeof(buffer));
   nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
-  while (nbytes > 0) {
-    // fixme ... should be returned to swift
-    if (fwrite(buffer, 1, nbytes, stdout) != (unsigned int) nbytes) {
-      goto failed;
+  while (nbytes > 0 && bytesWritten < 1023) {
+    for (int b=0; b<nbytes; b++) {
+      sprintf((char*)optr++, "%c", buffer[b]); /// hmmm. NOT nice.
     }
+    memset(buffer, 0, sizeof(buffer));
+    bytesWritten += nbytes;
     nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
   }
-
+  memcpy(outBytes,&bytesWritten,sizeof(bytesWritten));
   if (nbytes < 0) {
     goto failed;
   }
