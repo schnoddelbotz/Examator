@@ -25,12 +25,6 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="Run command" hidden="YES" enabled="NO" keyEquivalent="r" id="BOF-NM-1cW">
-                                <connections>
-                                    <action selector="runRemoteCommandPopup:" target="zf7-JK-yxs" id="kD7-yS-f4l"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
                             <menuItem title="Hide Examator" keyEquivalent="h" id="Olw-nP-bQN">
                                 <connections>
@@ -49,6 +43,50 @@
                                     <action selector="unhideAllApplications:" target="-1" id="Dhg-Le-xox"/>
                                 </connections>
                             </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Actions" hidden="YES" id="WZa-91-Twh" userLabel="Actions">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Actions" id="A1t-hG-DkQ">
+                        <items>
+                            <menuItem title="Run command" hidden="YES" enabled="NO" keyEquivalent="r" id="BOF-NM-1cW">
+                                <connections>
+                                    <action selector="runRemoteCommandPopup:" target="zf7-JK-yxs" id="kD7-yS-f4l"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Predefined commands" id="uac-lF-saz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Predefined commands" id="woQ-wn-wWH">
+                                    <items>
+                                        <menuItem title="Ping me" id="Rfm-F6-dWu">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Uptime" id="h9i-co-dBM">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Mute Sound" id="pR7-m3-Zxb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Lock X11" id="ZrW-a2-Mti">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" title="Predefined actions" id="VOq-y0-SEH"/>
+                            <menuItem title="Trigger status update" keyEquivalent="u" id="6TY-vl-vJC">
+                                <connections>
+                                    <action selector="triggerStatusUpdate:" target="zf7-JK-yxs" id="MtU-rw-xl5"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Trigger backup" keyEquivalent="b" id="RxY-hX-Bkw">
+                                <connections>
+                                    <action selector="triggerBackupRun:" target="zf7-JK-yxs" id="A56-9r-0cN"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="6P5-MO-0yZ"/>
+                            <menuItem title="Select all clients" keyEquivalent="a" id="2Tg-LK-Eew"/>
                         </items>
                     </menu>
                 </menuItem>
@@ -833,6 +871,7 @@
         </viewController>
         <viewController id="zf7-JK-yxs" customClass="ExamViewController" customModule="Examator" customModuleProvider="target">
             <connections>
+                <outlet property="actionsMenuItem" destination="WZa-91-Twh" id="qF2-Tr-hoX"/>
                 <outlet property="backupLoopCheckbox" destination="QMq-0w-181" id="W0n-nS-Mp9"/>
                 <outlet property="currentTimeLabel" destination="SLt-rm-dEC" id="Ud7-lB-iLY"/>
                 <outlet property="hostArrayCtrl" destination="1B3-42-9la" id="FKS-O4-0v6"/>

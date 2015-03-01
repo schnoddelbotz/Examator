@@ -15,6 +15,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   let gdefaults = NSUserDefaults.standardUserDefaults()
   var fullBackupRunning: Bool = false
   var backupTimer : NSTimer = NSTimer()
+  var statusTimer : NSTimer = NSTimer()
   var pStart : NSDate = NSDate() // why not access SVC.plannedStart?
   var pStop  : NSDate = NSDate()
   var totalMinutes : Int = 0
@@ -26,6 +27,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   @IBOutlet weak var nextBackupCountdownLabel: NSTextField!
   @IBOutlet weak var timeLeftLabel: NSTextField!
   @IBOutlet weak var hostArrayCtrl: NSArrayController!
+  @IBOutlet weak var actionsMenuItem: NSMenuItem!
 
   required init?(coder: NSCoder) {
     super.init(coder: coder)
@@ -36,7 +38,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     super.viewDidAppear()
     // start timers
     NSTimer.scheduledTimerWithTimeInterval(1.00, target: self, selector: "updateClock", userInfo: nil, repeats: true)
-    NSTimer.scheduledTimerWithTimeInterval(15.00, target: self, selector: "updateClientStatus", userInfo: nil, repeats: true)
+    statusTimer = NSTimer.scheduledTimerWithTimeInterval(15.00, target: self, selector: "updateClientStatus", userInfo: nil, repeats: true)
     // gnah... needs to start/stop on checkbox state - otherwise checking will not take instant full backup...
     backupTimer = NSTimer.scheduledTimerWithTimeInterval(120.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
     self.runCommandMenuEntry.hidden = false
@@ -46,6 +48,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     totalMinutes = Int(pStop.timeIntervalSinceDate(pStart)/60)
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+    self.actionsMenuItem.hidden = false
   }
 
   func updateClock() {
@@ -69,6 +72,14 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     timeLeftLabel.stringValue = "\(leftMinutes) of \(totalMinutes) minutes left"
   }
 
+  @IBAction func triggerStatusUpdate(sender: AnyObject) {
+    // instead of fire(), as it seems to reseat next call
+    statusTimer.fireDate = NSDate()
+  }
+  @IBAction func triggerBackupRun(sender: AnyObject) {
+    backupTimer.fireDate = NSDate()
+  }
+  
   @IBAction func runRemoteCommandPopup(sender: AnyObject) {
     let alert = NSAlert()
     alert.messageText = "Run remote command"
@@ -99,7 +110,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     }
     fullBackupRunning = true
     if (backupLoopCheckbox.state==1) {
-      NSLog("FULLBACKUP triggerd, ignoring selection: %@", hostArrayCtrl.selectionIndexes)
+      NSLog("FULLBACKUP triggerd (ignoring selection)"/*, hostArrayCtrl.selectionIndexes*/)
       // waiting for incrementals to finish... then
       for (host) in hostArray {
         if (host.sshStatus != Int(ServerKeyKnownOK)) {
