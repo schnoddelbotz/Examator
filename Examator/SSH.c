@@ -265,6 +265,7 @@ int authenticate_pubkey(ssh_session session){
   method = ssh_userauth_list(session, NULL);
   // Try to authenticate with public key first
   if (method & SSH_AUTH_METHOD_PUBLICKEY) {
+    // fixme: use/prefer(ence) ssh_userauth_agent	!!!
     rc = ssh_userauth_publickey_auto(session, NULL, NULL);
     if (rc == SSH_AUTH_ERROR) {
       error(session);

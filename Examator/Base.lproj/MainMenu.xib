@@ -86,7 +86,11 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="6P5-MO-0yZ"/>
-                            <menuItem title="Select all clients" keyEquivalent="a" id="2Tg-LK-Eew"/>
+                            <menuItem title="Select all clients" keyEquivalent="a" id="2Tg-LK-Eew">
+                                <connections>
+                                    <action selector="selectAllClients:" target="zf7-JK-yxs" id="pcX-5L-y7K"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -1025,7 +1029,7 @@
             </constraints>
             <point key="canvasLocation" x="1309" y="1083.5"/>
         </view>
-        <arrayController objectClassName="ExamHost" id="1B3-42-9la">
+        <arrayController objectClassName="ExamHost" selectsInsertedObjects="NO" avoidsEmptySelection="NO" id="1B3-42-9la">
             <declaredKeys>
                 <string>username</string>
                 <string>hostname</string>

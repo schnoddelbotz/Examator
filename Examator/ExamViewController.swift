@@ -133,6 +133,12 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     backupLoopEnabled = false
   }
 
+  @IBAction func selectAllClients(sender: AnyObject) {
+    let itemCount = hostArrayCtrl.arrangedObjects.count
+    let allItems = NSIndexSet(indexesInRange: NSMakeRange(0, itemCount))
+    hostArrayCtrl.setSelectionIndexes(allItems)
+  }
+
   @IBAction func pushExercises(sender: AnyObject) {
     // push exercises
     // ensure selection-or-all / or cancel via alert panel
@@ -140,13 +146,19 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     NSLog("PUSH exercises via libssh-scp-r to: %@", hostArrayCtrl.selectionIndexes)
     beginExamButton.enabled = true
   }
+
   @IBAction func runRemoteCommandPopup(sender: AnyObject) {
+    if (hostArrayCtrl.selectedObjects.count==0) {
+      // only works with/on selected hosts
+      return
+    }
     let alert = NSAlert()
     alert.messageText = "Run remote command"
     alert.informativeText = "Provide command to be executed on selected hosts." +
       "The first line of output will be shown in GUI (notyet)"
-    alert.addButtonWithTitle("Wait, what?")
+
     alert.addButtonWithTitle("Seems legit")
+    alert.addButtonWithTitle("Wait, what?")
 
     let textField : NSTextField = NSTextField()
     textField.setFrameSize(NSSize(width: 300, height: 24))
@@ -154,8 +166,38 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
 
     alert.accessoryView = textField
     if (alert.runModal() == NSAlertFirstButtonReturn) {
-      // FIXME
-      // run sshRemoteExec with textField.stringValue as command
+      NSLog("Will execute custom command: %@", textField.stringValue)
+
+      let remoteUsername = self.gdefaults.stringForKey(sshUsernameKey)! as NSString
+      let remoteCommandString  = textField.stringValue
+
+      for (host:ExamHost) in hostArrayCtrl.selectedObjects as Array {
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) {
+          host.actionStatusImage = NSImage(named:"wheel.gif")!
+
+          let bufferSize = 32768 // FIXME FIXME FIXME ... let's crash if too small.
+          var buffer = Array<UInt8>(count: bufferSize, repeatedValue: 0)
+          var retSize = UInt32(0)
+          let res = sshRemoteExec((host.hostname as NSString).UTF8String,remoteCommandString, (remoteUsername as NSString).UTF8String, &buffer, &retSize )
+
+          dispatch_async(dispatch_get_main_queue()) {
+            //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
+            host.statusLabelColor = NSColor.redColor()
+            host.actionStatusImage = NSImage(named:"status-error.png")!
+            host.sshStatus = Int(res) // bug
+            if (res == ServerKeyKnownOK) {
+              let data = NSData(bytes: buffer, length: Int(retSize))
+              let str = NSString(data: data, encoding: NSUTF8StringEncoding)
+              //println("Received \(str!.length) / \(retSize) : \(str!)")
+              host.statusLabelColor = NSColor.blackColor()
+              host.actionStatusImage = NSImage(named:"success.png")!
+              // fixme .sh retval?
+              // fixme ... handle long/multi-line output ...?
+              host.backupStatus = str!
+            }
+          }
+        }
+      }
     }
   }
 
