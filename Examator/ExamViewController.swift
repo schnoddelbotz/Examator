@@ -18,7 +18,11 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   var statusTimer : NSTimer = NSTimer()
   var pStart : NSDate = NSDate() // why not access SVC.plannedStart?
   var pStop  : NSDate = NSDate()
+  var actualStart : NSDate = NSDate()
+  var actualpStop : NSDate = NSDate() // planned stop using actual start + plantime
+  var actualStop : NSDate = NSDate()
   var totalMinutes : Int = 0
+  var examStarted = false
 
   @IBOutlet weak var currentTimeLabel: NSTextField!
   @IBOutlet weak var redBottomMessageLabel: NSTextField!
@@ -28,6 +32,11 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   @IBOutlet weak var timeLeftLabel: NSTextField!
   @IBOutlet weak var hostArrayCtrl: NSArrayController!
   @IBOutlet weak var actionsMenuItem: NSMenuItem!
+
+  @IBOutlet weak var beginExamButton: NSButton!
+  @IBOutlet weak var stopExamButton: NSButton!
+  @IBOutlet weak var actualStartTimeLabel: NSTextField! // not bound ...
+  @IBOutlet weak var actualStopTimeLabel: NSTextField!
 
   required init?(coder: NSCoder) {
     super.init(coder: coder)
@@ -49,6 +58,8 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
     self.actionsMenuItem.hidden = false
+    actualStartTimeLabel.stringValue = "-"
+    actualStopTimeLabel.stringValue = "-"
   }
 
   func updateClock() {
@@ -66,20 +77,69 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     //
     let nextBackupInSeconds = Int(backupTimer.fireDate.timeIntervalSinceDate(date))
     nextBackupCountdownLabel.stringValue = "Next backup in \(nextBackupInSeconds) seconds"
-    //
-    // FIXME: use acuatlStop (notyet) instead of pStop
-    let leftMinutes = Int(abs(pStop.timeIntervalSinceDate(date))/60)
-    timeLeftLabel.stringValue = "\(leftMinutes) of \(totalMinutes) minutes left"
+
+    // update "time left" label -- FIXME not sane yet...
+    if (!examStarted) {
+      let leftSeconds = Int(pStart.timeIntervalSinceDate(date))
+      let leftMinutes = Int(leftSeconds/60)
+      if (leftSeconds > 0) {
+        timeLeftLabel.textColor = NSColor.greenColor() // tooo light
+        timeLeftLabel.stringValue = "\(leftMinutes) minutes left to planned start" // ?
+      } else {
+        timeLeftLabel.stringValue = "planned start was \(abs(leftSeconds)) seconds ago"
+        timeLeftLabel.textColor = NSColor.redColor()
+      }
+    } else {
+      let leftSeconds = Int(actualpStop.timeIntervalSinceDate(date))
+      let leftMinutes = Int(leftSeconds/60)
+      if (leftSeconds>0) {
+        timeLeftLabel.stringValue = "\(leftMinutes) of \(totalMinutes) minutes left"
+      } else {
+        timeLeftLabel.stringValue = "Time is over!"
+        timeLeftLabel.textColor = NSColor.redColor()
+      }
+    }
   }
 
   @IBAction func triggerStatusUpdate(sender: AnyObject) {
     // instead of fire(), as it seems to reseat next call
     statusTimer.fireDate = NSDate()
   }
+
   @IBAction func triggerBackupRun(sender: AnyObject) {
     backupTimer.fireDate = NSDate()
   }
-  
+
+  @IBAction func beginExamTime(sender: AnyObject) {
+    examStarted = true
+    stopExamButton.enabled = true
+    actualStart = NSDate()
+    actualpStop = actualStart.dateByAddingTimeInterval(Double(totalMinutes)*60)
+
+    let calendar = NSCalendar.currentCalendar()
+    var components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: actualStart)
+    var hour = String(format: "%02d", components.hour)
+    var minutes = String(format: "%02d", components.minute)
+    actualStartTimeLabel.stringValue = "\(hour):\(minutes)"
+    components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: actualpStop)
+    hour = String(format: "%02d", components.hour)
+    minutes = String(format: "%02d", components.minute)
+    actualStopTimeLabel.stringValue = "\(hour):\(minutes)"
+    timeLeftLabel.textColor = NSColor.blackColor()
+  }
+
+  @IBAction func stopExamTime(sender: AnyObject) {
+    actualStop = NSDate()
+    backupLoopEnabled = false
+  }
+
+  @IBAction func pushExercises(sender: AnyObject) {
+    // push exercises
+    // ensure selection-or-all / or cancel via alert panel
+    // enable 'begin exam' (time) button
+    NSLog("PUSH exercises via libssh-scp-r to: %@", hostArrayCtrl.selectionIndexes)
+    beginExamButton.enabled = true
+  }
   @IBAction func runRemoteCommandPopup(sender: AnyObject) {
     let alert = NSAlert()
     alert.messageText = "Run remote command"
@@ -145,10 +205,6 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     // maybe a fullBackupTar should be triggered here ... good moment + avoid another timer?
   }
 
-  func doMeError() {
-    NSLog("REMOVE ME WTF");
-  }
-
   func updateClientStatus() {
     // triggered by timer, polls infos from all clients
 
@@ -185,9 +241,8 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
           host.sshStatus = Int(res) // bug
           if (res == ServerKeyKnownOK) {
             var parseError: NSError?
-            //let data = NSData(bytes: buffer, length: bufferSize)
             let data = NSData(bytes: buffer, length: Int(retSize))
-            let str = NSString(data: data, encoding: NSUTF8StringEncoding)
+            //let str = NSString(data: data, encoding: NSUTF8StringEncoding)
             //println("Received \(str!.length) / \(retSize) : \(str!)")
             //{"hostname":"nas","realname":"Schnoddelbotz","username":"hacker","diskfree":"943G","memfree":"4188648","numresults":"0"}
             let jsonData : AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
@@ -199,8 +254,8 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
               if let username = json["username"] as? String {
                 if let realname = json["realname"] as? String {
                   if (realname != "") {
-                  host.userRealname = realname
-                  host.username = username
+                    host.userRealname = realname
+                    host.username = username
                   } else {
                     host.username = "Nobody"
                     host.backupStatusImage = NSImage()

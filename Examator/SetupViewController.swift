@@ -65,6 +65,23 @@ class SetupViewController: NSViewController {
   }
 
   @IBAction func continueToExamatorWindow(sender: AnyObject) {
+    // NSDate chooser provides a full datetime including seconds, strip/align unwanted stuff -- better way?
+    let calendar = NSCalendar.currentCalendar()
+    let nowComponents   = calendar.components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay , fromDate: NSDate())
+    let startComponents = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond | .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay, fromDate: plannedStart)
+    let stopComponents  = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond | .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay, fromDate: plannedStop)
+    startComponents.setValue(nowComponents.day, forComponent: .CalendarUnitDay)
+    startComponents.setValue(nowComponents.month, forComponent: .CalendarUnitMonth)
+    startComponents.setValue(nowComponents.year, forComponent: .CalendarUnitYear)
+    startComponents.setValue(0, forComponent: .CalendarUnitSecond)
+    stopComponents.setValue(nowComponents.day, forComponent: .CalendarUnitDay)
+    stopComponents.setValue(nowComponents.month, forComponent: .CalendarUnitMonth)
+    stopComponents.setValue(nowComponents.year, forComponent: .CalendarUnitYear)
+    stopComponents.setValue(0, forComponent: .CalendarUnitSecond)
+    plannedStart = calendar.dateFromComponents(startComponents)!
+    plannedStop  = calendar.dateFromComponents(stopComponents)!
+
+    // save settings to userprefs
     gdefaults.setObject(sshIdentityTextbox.stringValue, forKey:sshIdentityKey)
     gdefaults.setObject(sshUsernameTextbox.stringValue, forKey:sshUsernameKey)
     gdefaults.setObject(exercisesPathTextbox.stringValue, forKey:exercisesStoragePathKey)
