@@ -24,24 +24,24 @@ var examRoomArray : [ExamRoom] = []
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-    
+
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     // Insert code here to initialize your application
   }
-  
+
   override init() {
     super.init()
     let infoDict : NSDictionary = NSBundle.mainBundle().infoDictionary!
     if let versionString = infoDict["CFBundleShortVersionString"] as? String {
       NSLog("Examator version %@ AppDelegate:init()",versionString)
     }
-    
+
     // to showcase working libssh C bridge...
     initLibSSH()
     let sshCopyright = String.fromCString(getSSHCopyrightString())
     NSLog("Examator ships with libssh -- copyright notice:")
     NSLog("libssh %@", sshCopyright!)
-    
+
     // set defaults for empty startup preferences
     let udefaults = [
         resultsStoragePathKey:   "~/collected-results",
@@ -54,14 +54,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     NSUserDefaults.standardUserDefaults().registerDefaults(udefaults)
     loadBundledJSONRoomdata()
   }
-  
+
   func loadBundledJSONRoomdata() {
     let jsonPath = String(format: "%@%@",
       NSBundle.mainBundle().bundlePath, "/Contents/Resources/roomdata.json")
     let jsonRaw = try? NSData(contentsOfFile:jsonPath, options:[])
     let jsonData : AnyObject? = try? NSJSONSerialization.JSONObjectWithData(jsonRaw!,
       options: NSJSONReadingOptions.AllowFragments)
-    
+
     if let json = jsonData as? NSDictionary {
       if let rooms = json["rooms"] as? NSArray {
         importRoomdata(rooms)
@@ -72,7 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     //NSLog("Rooms: %@", examRoomArray)
   }
-  
+
   func importRoomdata(rooms: NSArray) -> Void {
     for (index, room) in rooms.enumerate() {
       //  println("Room \(index): \(room)")
@@ -92,7 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
   }
-  
+
   func importHostdata(hosts: NSArray) -> Void {
     //        hostDictionary = hosts ... "ou_id" = int, hostname
     //    NSLog("HOSTS ... %@ ...", hosts)
@@ -110,7 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
   }
-  
+
   func getExamRoomByDbId(searchId: Int) -> ExamRoom {
     // come on ... a but more sophisticated, please :-)
     // http://digitalleaves.com/blog/2014/11/membership-of-custom-objects-in-swift-arrays-and-dictionaries/
@@ -122,7 +122,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     NSLog("FIXME: FAILED getExamRoomByDbId lookup!")
     return ExamRoom()
   }
-  
+
   // any window that has its delegate bound here will show this dialog ...
   // fixme: does not catch cmd-q; fixed by removing key+menu entry in app menu
   func windowShouldClose(id: AnyObject) -> Bool {
@@ -136,17 +136,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     return true
   }
-  
+
   func applicationWillTerminate(aNotification: NSNotification) {
     // Insert code here to tear down your application
     NSLog("Teardown!")
     shutdownLibSSH()
   }
-  
-  func applicationShouldTerminateAfterLastWindowClosed() -> DarwinBoolean {
+
+  func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
     return true
   }
-  
+
 }
 
 
