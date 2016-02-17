@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A66F11E1C7471620090AECF /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A66F11D1C7471620090AECF /* libcrypto.1.0.0.dylib */; };
+		2A66F11F1C7471700090AECF /* libcrypto.1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A66F11D1C7471620090AECF /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3D4A80CB1A99560300A5A6EB /* libssh.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */; };
 		3D4A80CE1A99562B00A5A6EB /* libssh.4.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3D4EFDF31AA23A8C002BEE52 /* wheel.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3D4EFDF21AA23A8C002BEE52 /* wheel.gif */; };
@@ -56,6 +58,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
+				2A66F11F1C7471700090AECF /* libcrypto.1.0.0.dylib in CopyFiles */,
 				3D4A80CE1A99562B00A5A6EB /* libssh.4.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2A66F11D1C7471620090AECF /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.1.0.0.dylib; sourceTree = SOURCE_ROOT; };
 		3D48930A1A995AC300D3121D /* callbacks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = callbacks.h; sourceTree = "<group>"; };
 		3D48930B1A995AC300D3121D /* sftp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sftp.h; sourceTree = "<group>"; };
 		3D48930C1A995AC300D3121D /* ssh2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ssh2.h; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A66F11E1C7471620090AECF /* libcrypto.1.0.0.dylib in Frameworks */,
 				3D4A80CB1A99560300A5A6EB /* libssh.4.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,6 +131,7 @@
 		3D48930D1A995B4400D3121D /* libssh */ = {
 			isa = PBXGroup;
 			children = (
+				2A66F11D1C7471620090AECF /* libcrypto.1.0.0.dylib */,
 				3D4A80CA1A99560300A5A6EB /* libssh.4.dylib */,
 				3D6348591A99369600C57B21 /* libssh.h */,
 				3D48930A1A995AC300D3121D /* callbacks.h */,
@@ -283,6 +289,8 @@
 		3DF72E521A93D73A00C9F130 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0720;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = schnoddelbotz;
 				TargetAttributes = {
@@ -359,7 +367,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# build libssh.4.dylib into Examtor directory.\n\n# cmake is required! (brew install cmake ...)\nexport PATH=/usr/local/bin:$PATH\n\nif [ ! -f libssh.4.dylib ]; then\n\n  git clone git://git.libssh.org/projects/libssh.git libssh\n  cd libssh\n  mkdir build\n  cd build\n  cmake -DWITH_ZLIB=OFF -DOPENSSL_INCLUDE_DIR=${DEVELOPER_SDK_DIR}/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk/usr/include -DCMAKE_INSTALL_PREFIX=../../libssh-built -DCMAKE_INSTALL_NAME_DIR=@executable_path ..\n  make -j8\n  make install\n  cd ../..\n  cp libssh-built/lib/libssh.4.dylib .\n  grep -v '#include <libssh/libssh.h>' libssh-built/include/libssh/callbacks.h > Examator/callbacks.h\n  grep -v '#include \"libssh/legacy.h\"' libssh-built/include/libssh/libssh.h > Examator/libssh.h\n  cp libssh-built/include/libssh/{sftp,ssh2}.h Examator\n  rm -rf libssh libssh-built\n\nfi";
+			shellScript = "#!/bin/sh\n\n./compile_libssh.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 

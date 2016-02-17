@@ -43,13 +43,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     NSLog("libssh %@", sshCopyright!)
     
     // set defaults for empty startup preferences
-    let udefaults = NSMutableDictionary()
-    udefaults.setObject("~/collected-results", forKey:resultsStoragePathKey)
-    udefaults.setObject("~/exam-tasks-and-resources", forKey:exercisesStoragePathKey)
-    udefaults.setObject("student", forKey:sshUsernameKey)
-    udefaults.setObject("~/.ssh/id_dsa", forKey:sshIdentityKey)
-    udefaults.setObject(NSDate(), forKey: plannedStartKey)
-    udefaults.setObject(NSDate(), forKey: plannedStopKey)
+    let udefaults = [
+        resultsStoragePathKey:   "~/collected-results",
+        exercisesStoragePathKey: "~/exam-tasks-and-resources",
+        sshUsernameKey:          "student",
+        sshIdentityKey:          "~/.ssh/id_dsa",
+        plannedStartKey:         NSDate(),
+        plannedStopKey:          NSDate()
+    ];
     NSUserDefaults.standardUserDefaults().registerDefaults(udefaults)
     loadBundledJSONRoomdata()
   }
@@ -57,9 +58,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func loadBundledJSONRoomdata() {
     let jsonPath = String(format: "%@%@",
       NSBundle.mainBundle().bundlePath, "/Contents/Resources/roomdata.json")
-    let jsonRaw = NSData(contentsOfFile:jsonPath, options:nil, error: nil)
-    let jsonData : AnyObject? = NSJSONSerialization.JSONObjectWithData(jsonRaw!,
-      options: NSJSONReadingOptions.AllowFragments, error: nil)
+    let jsonRaw = try? NSData(contentsOfFile:jsonPath, options:[])
+    let jsonData : AnyObject? = try? NSJSONSerialization.JSONObjectWithData(jsonRaw!,
+      options: NSJSONReadingOptions.AllowFragments)
     
     if let json = jsonData as? NSDictionary {
       if let rooms = json["rooms"] as? NSArray {
@@ -73,7 +74,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
   func importRoomdata(rooms: NSArray) -> Void {
-    for (index, room) in enumerate(rooms) {
+    for (index, room) in rooms.enumerate() {
       //  println("Room \(index): \(room)")
       if let children = room["children"] as? NSArray {
         // only operate on leaf nodes, i.e. rooms, not OUs -- flattens
@@ -81,7 +82,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
           let newRoom = ExamRoom()
           // fixme: string inside json!
           if let id = room["id"] as? String {
-            newRoom.dbId = id.toInt()!
+            newRoom.dbId = Int(id)!
             if let name = room["name"] as? String {
               newRoom.name = name
               examRoomArray.append(newRoom)
@@ -95,12 +96,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func importHostdata(hosts: NSArray) -> Void {
     //        hostDictionary = hosts ... "ou_id" = int, hostname
     //    NSLog("HOSTS ... %@ ...", hosts)
-    for (index, host) in enumerate(hosts) {
+    for (index, host) in hosts.enumerate() {
       //println("Item \(index): \(host)")
       if let h = host["hostname"] as? String {
         if let ou = host["ou_id"] as? String {
-          let roomObj = getExamRoomByDbId(ou.toInt()!)
-          var newHost = ExamHost()
+          let roomObj = getExamRoomByDbId(Int(ou)!)
+          let newHost = ExamHost()
           newHost.hostname = h
           newHost.room = roomObj
           //NSLog("Got ROOM %@ for host %@ in roomDbId %@", roomObj, h, ou)
@@ -113,7 +114,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func getExamRoomByDbId(searchId: Int) -> ExamRoom {
     // come on ... a but more sophisticated, please :-)
     // http://digitalleaves.com/blog/2014/11/membership-of-custom-objects-in-swift-arrays-and-dictionaries/
-    for (index, r) in enumerate(examRoomArray) {
+    for (index, r) in examRoomArray.enumerate() {
       if (r.dbId==searchId) {
         return r
       }
@@ -142,8 +143,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     shutdownLibSSH()
   }
   
-  func applicationShouldTerminateAfterLastWindowClosed(theApplication: NSApplication) -> Boolean {
-    return 1
+  func applicationShouldTerminateAfterLastWindowClosed() -> DarwinBoolean {
+    return true
   }
   
 }

@@ -34,8 +34,8 @@ class SetupViewController: NSViewController {
     exercisesPathTextbox.stringValue = gdefaults.stringForKey(exercisesStoragePathKey)!
     sshIdentityTextbox.stringValue   = gdefaults.stringForKey(sshIdentityKey)!
     sshUsernameTextbox.stringValue   = gdefaults.stringForKey(sshUsernameKey)!
-    plannedStart = gdefaults.valueForKey(plannedStartKey) as NSDate
-    plannedStop  = gdefaults.valueForKey(plannedStopKey) as NSDate
+    plannedStart = gdefaults.valueForKey(plannedStartKey) as! NSDate
+    plannedStop  = gdefaults.valueForKey(plannedStopKey) as! NSDate
   }
 
   required init?(coder: NSCoder) {
@@ -48,7 +48,7 @@ class SetupViewController: NSViewController {
   
   func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject! {
     // provide strings for table view room chooser
-    var ret : String = "error"
+    let ret : String = "error"
     if (row >= 0 && row < examRoomArray.count) {
       let room = examRoomArray[row] as ExamRoom
       // fixme return pc count for 2nd column here
@@ -67,17 +67,17 @@ class SetupViewController: NSViewController {
   @IBAction func continueToExamatorWindow(sender: AnyObject) {
     // NSDate chooser provides a full datetime including seconds, strip/align unwanted stuff -- better way?
     let calendar = NSCalendar.currentCalendar()
-    let nowComponents   = calendar.components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay , fromDate: NSDate())
-    let startComponents = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond | .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay, fromDate: plannedStart)
-    let stopComponents  = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond | .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay, fromDate: plannedStop)
-    startComponents.setValue(nowComponents.day, forComponent: .CalendarUnitDay)
-    startComponents.setValue(nowComponents.month, forComponent: .CalendarUnitMonth)
-    startComponents.setValue(nowComponents.year, forComponent: .CalendarUnitYear)
-    startComponents.setValue(0, forComponent: .CalendarUnitSecond)
-    stopComponents.setValue(nowComponents.day, forComponent: .CalendarUnitDay)
-    stopComponents.setValue(nowComponents.month, forComponent: .CalendarUnitMonth)
-    stopComponents.setValue(nowComponents.year, forComponent: .CalendarUnitYear)
-    stopComponents.setValue(0, forComponent: .CalendarUnitSecond)
+    let nowComponents   = calendar.components([.Year, .Month, .Day] , fromDate: NSDate())
+    let startComponents = calendar.components([.Hour, .Minute, .Second, .Year, .Month, .Day], fromDate: plannedStart)
+    let stopComponents  = calendar.components([.Hour, .Minute, .Second, .Year, .Month, .Day], fromDate: plannedStop)
+    startComponents.setValue(nowComponents.day, forComponent: .Day)
+    startComponents.setValue(nowComponents.month, forComponent: .Month)
+    startComponents.setValue(nowComponents.year, forComponent: .Year)
+    startComponents.setValue(0, forComponent: .Second)
+    stopComponents.setValue(nowComponents.day, forComponent: .Day)
+    stopComponents.setValue(nowComponents.month, forComponent: .Month)
+    stopComponents.setValue(nowComponents.year, forComponent: .Year)
+    stopComponents.setValue(0, forComponent: .Second)
     plannedStart = calendar.dateFromComponents(startComponents)!
     plannedStop  = calendar.dateFromComponents(stopComponents)!
 
@@ -98,7 +98,7 @@ class SetupViewController: NSViewController {
     var totalSeats = 0
     selectedRooms.enumerateIndexesUsingBlock { (idx, _) in
       let item = examRoomArray[idx]
-      for (index, host) in enumerate(item.examHosts) {
+      for (index, host) in item.examHosts.enumerate() {
         totalSeats++
       }
     }
@@ -124,7 +124,7 @@ class SetupViewController: NSViewController {
     // add hosts from selected rooms to collectionView
     selectedRooms.enumerateIndexesUsingBlock { (idx, _) in
       let item = examRoomArray[idx]
-      for (index, host) in enumerate(item.examHosts) {
+      for (index, host) in item.examHosts.enumerate() {
         self.hostArrayCtrl.addObject(host)
       }
     }
@@ -137,7 +137,7 @@ class SetupViewController: NSViewController {
   }
 
   @IBAction func selectSshIdentityFile(sender: AnyObject) {
-    var dialog: NSOpenPanel = NSOpenPanel()
+    let dialog: NSOpenPanel = NSOpenPanel()
     dialog.prompt = "Use selected identity"
     dialog.worksWhenModal = true
     dialog.allowsMultipleSelection = false
@@ -147,15 +147,15 @@ class SetupViewController: NSViewController {
     dialog.title = "Select SSH identity (private key) to use"
     dialog.message = "The public key counterpart must be allowed to log in remotely"
     dialog.runModal()
-    var chosenfile = dialog.URL
+    let chosenfile = dialog.URL
     if (chosenfile != nil) {
-      var TheFile = chosenfile?.path
+      let TheFile = chosenfile?.path
       sshIdentityTextbox.stringValue = TheFile!
     }
   }
   
   @IBAction func selectExercisesFolder(sender: AnyObject) {
-    var dialog: NSOpenPanel = NSOpenPanel()
+    let dialog: NSOpenPanel = NSOpenPanel()
     dialog.prompt = "Use selected folder"
     dialog.worksWhenModal = true
     dialog.allowsMultipleSelection = false
@@ -165,15 +165,15 @@ class SetupViewController: NSViewController {
     dialog.title = "Select exercises folder for distribution"
     dialog.message = "The folder contents will be transfered, not the folder itself"
     dialog.runModal()
-    var chosenfile = dialog.URL
+    let chosenfile = dialog.URL
     if (chosenfile != nil) {
-      var TheFile = chosenfile?.path
+      let TheFile = chosenfile?.path
       exercisesPathTextbox.stringValue = TheFile!
     }
   }
   
   @IBAction func selectResultsStorageFolder(sender: AnyObject) {
-    var dialog: NSOpenPanel = NSOpenPanel()
+    let dialog: NSOpenPanel = NSOpenPanel()
     dialog.canCreateDirectories = true
     dialog.prompt = "Use selected folder"
     dialog.worksWhenModal = true
@@ -184,9 +184,9 @@ class SetupViewController: NSViewController {
     dialog.title = "Select folder to store collected results"
     dialog.message = "Folder should reside on fast local disk with enough space left"
     dialog.runModal()
-    var chosenfile = dialog.URL
+    let chosenfile = dialog.URL
     if (chosenfile != nil) {
-      var TheFile = chosenfile?.path
+      let TheFile = chosenfile?.path
       resultsPathTextbox.stringValue = TheFile!
     }
   }

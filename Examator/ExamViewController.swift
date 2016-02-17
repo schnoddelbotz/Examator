@@ -52,8 +52,8 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     backupTimer = NSTimer.scheduledTimerWithTimeInterval(120.0, target: self, selector: "runFullBackupLoopIteration", userInfo: nil, repeats: true)
     self.runCommandMenuEntry.hidden = false
     //self.nextBackupCountdownLabel.hidden = true
-    pStart = self.gdefaults.valueForKey(plannedStartKey) as NSDate
-    pStop  = self.gdefaults.valueForKey(plannedStopKey) as NSDate
+    pStart = self.gdefaults.valueForKey(plannedStartKey) as! NSDate
+    pStop  = self.gdefaults.valueForKey(plannedStopKey) as! NSDate
     totalMinutes = Int(pStop.timeIntervalSinceDate(pStart)/60)
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
@@ -65,7 +65,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
   func updateClock() {
     let date = NSDate()
     let calendar = NSCalendar.currentCalendar()
-    let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: date)
+    let components = calendar.components([.Hour, .Minute, .Second], fromDate: date)
     let hour = String(format: "%02d", components.hour)
     let minutes = String(format: "%02d", components.minute)
     let seconds = components.second
@@ -117,11 +117,11 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     actualpStop = actualStart.dateByAddingTimeInterval(Double(totalMinutes)*60)
 
     let calendar = NSCalendar.currentCalendar()
-    var components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: actualStart)
+    var components = calendar.components([.Hour, .Minute, .Second], fromDate: actualStart)
     var hour = String(format: "%02d", components.hour)
     var minutes = String(format: "%02d", components.minute)
     actualStartTimeLabel.stringValue = "\(hour):\(minutes)"
-    components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: actualpStop)
+    components = calendar.components([.Hour, .Minute, .Second], fromDate: actualpStop)
     hour = String(format: "%02d", components.hour)
     minutes = String(format: "%02d", components.minute)
     actualStopTimeLabel.stringValue = "\(hour):\(minutes)"
@@ -171,8 +171,8 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
       let remoteUsername = self.gdefaults.stringForKey(sshUsernameKey)! as NSString
       let remoteCommandString  = textField.stringValue
 
-      for (host:ExamHost) in hostArrayCtrl.selectedObjects as Array {
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) {
+      for (host): (ExamHost) in hostArrayCtrl.selectedObjects as! Array {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
           host.actionStatusImage = NSImage(named:"wheel.gif")!
 
           let bufferSize = 32768 // FIXME FIXME FIXME ... let's crash if too small.
@@ -193,7 +193,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
               host.actionStatusImage = NSImage(named:"success.png")!
               // fixme .sh retval?
               // fixme ... handle long/multi-line output ...?
-              host.backupStatus = str!
+              host.backupStatus = str! as String
             }
           }
         }
@@ -220,7 +220,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
           // hack warning: this is also true if no student is logged in
           continue
         }
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { // 1
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.rawValue), 0)) { // 1
           let diceRollFiles = Int(arc4random_uniform(20))
           host.backupStatusImage = NSImage(named: "wheel.gif")!
           // FIXME
@@ -228,7 +228,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
             //NSLog("Back from \(host.hostname) to mainthread - ret \(res)")
             let nowTime = NSDate()
             let calendar = NSCalendar.currentCalendar()
-            let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: nowTime)
+            let components = calendar.components([.Hour, .Minute, .Second], fromDate: nowTime)
             let nowString = String(format: "%02d:%02d:%02d", components.hour, components.minute, components.second)
             // if 0 result files present, then orange-x
             host.lastBackup = "\(diceRollFiles) files"
@@ -267,7 +267,7 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
 
     for (host) in hostArray {
 
-      dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) {
+      dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.rawValue), 0)) {
         host.actionStatusImage = NSImage(named:"wheel.gif")!
 
         let bufferSize = 256
@@ -287,8 +287,16 @@ class ExamViewController: NSViewController, NSTableViewDelegate, NSTableViewData
             //let str = NSString(data: data, encoding: NSUTF8StringEncoding)
             //println("Received \(str!.length) / \(retSize) : \(str!)")
             //{"hostname":"nas","realname":"Schnoddelbotz","username":"hacker","diskfree":"943G","memfree":"4188648","numresults":"0"}
-            let jsonData : AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
-              options: NSJSONReadingOptions.AllowFragments, error: &parseError)
+            let jsonData : AnyObject?
+            do {
+              jsonData = try NSJSONSerialization.JSONObjectWithData(data,
+                            options: NSJSONReadingOptions.AllowFragments)
+            } catch let error as NSError {
+              parseError = error
+              jsonData = nil
+            } catch {
+              fatalError()
+            }
             if ((parseError) != nil) {
               NSLog("JSON ERROR on %@ : %@",host.hostname, parseError!);
             }
